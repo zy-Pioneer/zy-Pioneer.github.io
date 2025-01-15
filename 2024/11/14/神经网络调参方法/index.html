@@ -1,0 +1,768 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="coisini">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="调参顺序第一个要进行调整的参数就是学习率，需要设置一个好的初始学习率，它可以决定损失函数的降低速度以及损失函数的最低位置。通常从 0.01 开始，**范围从 [1e-6,1e-1]**，通常只选择 1en 。 学习率优化器是针对每个参数进行调整的，学习率调度器是对全局的学习率进行调整的。    学习率调度器 学习率优化器 组合优势 适用场景    StepLR SGD, Adam 定期减小学习率，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="神经网络调参技巧">
+<meta property="og:url" content="http://example.com/2024/11/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Coisini&#39;s Blog">
+<meta property="og:description" content="调参顺序第一个要进行调整的参数就是学习率，需要设置一个好的初始学习率，它可以决定损失函数的降低速度以及损失函数的最低位置。通常从 0.01 开始，**范围从 [1e-6,1e-1]**，通常只选择 1en 。 学习率优化器是针对每个参数进行调整的，学习率调度器是对全局的学习率进行调整的。    学习率调度器 学习率优化器 组合优势 适用场景    StepLR SGD, Adam 定期减小学习率，">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-11-14T02:00:00.000Z">
+<meta property="article:modified_time" content="2025-01-15T02:57:40.328Z">
+<meta property="article:author" content="coisini">
+<meta property="article:tag" content="深度学习">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>神经网络调参技巧 - Coisini&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="神经网络调参技巧"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-11-14 10:00" pubdate>
+          2024年11月14日 上午
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          1.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          11 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">神经网络调参技巧</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="调参顺序"><a href="#调参顺序" class="headerlink" title="调参顺序"></a>调参顺序</h2><p>第一个要进行调整的参数就是学习率，需要设置一个好的初始学习率，它可以决定损失函数的降低速度以及损失函数的最低位置。通常从 0.01 开始，**范围从 [1e-6,1e-1]**，通常只选择 1e<sup>n</sup> 。</p>
+<p>学习率优化器是针对每个参数进行调整的，学习率调度器是对全局的学习率进行调整的。</p>
+<table>
+<thead>
+<tr>
+<th><strong>学习率调度器</strong></th>
+<th><strong>学习率优化器</strong></th>
+<th><strong>组合优势</strong></th>
+<th><strong>适用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>StepLR</strong></td>
+<td>SGD, Adam</td>
+<td>定期减小学习率，简单高效，防止过拟合</td>
+<td>大多数监督学习任务，如分类、回归任务</td>
+</tr>
+<tr>
+<td><strong>ReduceLROnPlateau</strong></td>
+<td>SGD, Adam</td>
+<td>自适应调节学习率，基于验证损失自动减少，避免学习率过小</td>
+<td>验证集性能停滞的任务，如回归、复杂的模型训练</td>
+</tr>
+<tr>
+<td><strong>ExponentialLR</strong></td>
+<td>SGD, Adam, RMSprop</td>
+<td>指数衰减学习率，快速收敛，减少训练时间</td>
+<td>快速收敛场景，适合较大规模数据集</td>
+</tr>
+<tr>
+<td><strong>CosineAnnealingLR</strong></td>
+<td>SGD, Adam</td>
+<td>平滑衰减学习率，避免震荡，适合长时间训练</td>
+<td>长期训练的大型深度神经网络，如卷积神经网络</td>
+</tr>
+<tr>
+<td><strong>CyclicLR</strong></td>
+<td>Adam, RMSprop</td>
+<td>周期性调整学习率，跳出局部最优，稳定优化</td>
+<td>复杂优化任务，如生成对抗网络（GAN）、深度强化学习</td>
+</tr>
+<tr>
+<td><strong>OneCycleLR</strong></td>
+<td>Adam, SGD</td>
+<td>先增大学习率，后逐渐减小，快速找到最优解</td>
+<td>快速训练大规模神经网络，如图像分类、NLP大模型</td>
+</tr>
+<tr>
+<td><strong>LambdaLR</strong></td>
+<td>任意优化器</td>
+<td>完全自定义学习率变化策略，灵活可控</td>
+<td>特定需求场景，无法用其他调度器满足的情况</td>
+</tr>
+<tr>
+<td><strong>MultiStepLR</strong></td>
+<td>SGD, Adam</td>
+<td>在特定里程碑时减少学习率，适合多阶段训练</td>
+<td>长期训练的任务，如卷积神经网络、阶段性改进模型性能</td>
+</tr>
+</tbody></table>
+<h2 id="过拟合缓解措施"><a href="#过拟合缓解措施" class="headerlink" title="过拟合缓解措施"></a>过拟合缓解措施</h2><table>
+<thead>
+<tr>
+<th><strong>方法</strong></th>
+<th><strong>原理</strong></th>
+<th><strong>适用场景</strong></th>
+<th><strong>优势</strong></th>
+<th><strong>使用场景</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L2 正则化</strong></td>
+<td>在损失函数中加入权重的平方和作为惩罚项，防止权重过大</td>
+<td>大多数神经网络，尤其是复杂的深度模型</td>
+<td>减少权重过大，提升模型的泛化能力</td>
+<td>数据量大、模型复杂，可能出现过拟合的场景</td>
+</tr>
+<tr>
+<td><strong>L1 正则化</strong></td>
+<td>在损失函数中加入权重的绝对值和作为惩罚项，倾向于使部分权重趋近于零</td>
+<td>稀疏模型、特征选择</td>
+<td>实现特征选择，简化模型</td>
+<td>需要稀疏性或特征选择的任务，如文本分类</td>
+</tr>
+<tr>
+<td><strong>Dropout</strong></td>
+<td>训练时随机丢弃部分神经元，减少神经元间共适应性</td>
+<td>深度神经网络，尤其是全连接层较多的模型</td>
+<td>提升泛化能力，减少共适应性</td>
+<td>卷积神经网络（CNN）、循环神经网络（RNN）</td>
+</tr>
+<tr>
+<td><strong>早停法（Early Stopping）</strong></td>
+<td>监控验证集性能，当性能不再提升时停止训练</td>
+<td>所有深度学习任务，特别是长时间训练的任务</td>
+<td>节省训练时间，防止过拟合</td>
+<td>长时间训练的任务，如大型神经网络、语言模型</td>
+</tr>
+<tr>
+<td><strong>数据增强</strong></td>
+<td>通过随机变换训练数据（如翻转、裁剪等）增加数据的多样性</td>
+<td>图像分类、时间序列处理等</td>
+<td>增强数据集多样性，提高模型泛化能力</td>
+<td>图像分类（翻转、旋转）、语音处理（噪声增强）</td>
+</tr>
+<tr>
+<td><strong>Batch Normalization</strong></td>
+<td>对每层的激活值进行标准化处理，使输入具有稳定的分布</td>
+<td>深层神经网络，如卷积神经网络和循环神经网络</td>
+<td>加速收敛，防止过拟合，训练更稳定</td>
+<td>深层模型（如ResNet、VGG等），用于加速训练和稳定</td>
+</tr>
+<tr>
+<td><strong>减少模型复杂度</strong></td>
+<td>减少模型的参数量（如降低网络层数、神经元数）</td>
+<td>小数据集、简单任务</td>
+<td>通过简化模型结构减少过拟合风险</td>
+<td>数据较少、简单任务，如小型图像分类任务</td>
+</tr>
+<tr>
+<td><strong>交叉验证</strong></td>
+<td>将数据划分为多个子集，循环验证模型性能</td>
+<td>小数据集、模型调参</td>
+<td>多次训练提高模型评估的稳定性</td>
+<td>小数据集，模型调优，避免单次训练评估误差的场景</td>
+</tr>
+<tr>
+<td><strong>添加噪声</strong></td>
+<td>在输入、隐藏层或输出层添加噪声，增加模型的训练难度</td>
+<td>时间序列、音频处理任务</td>
+<td>增强模型鲁棒性，防止过拟合</td>
+<td>语音、时间序列等，模型需要适应噪声的场景</td>
+</tr>
+<tr>
+<td><strong>调节批次大小</strong></td>
+<td>使用较小的批次大小，增加训练中的随机性</td>
+<td>深度学习模型，特别是CNN和RNN模型</td>
+<td>小批次能有效提升模型的泛化能力</td>
+<td>大规模数据处理，小批次可能提升泛化效果的场景</td>
+</tr>
+<tr>
+<td><strong>正则化项</strong></td>
+<td>在损失函数中添加特定任务的自定义正则化项</td>
+<td>特定任务，如有特定约束的模型</td>
+<td>更好地控制模型的复杂性</td>
+<td>有明确的任务约束，如控制输出范围的场景</td>
+</tr>
+</tbody></table>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="print-no-link">#深度学习</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>神经网络调参技巧</div>
+      <div>http://example.com/2024/11/14/神经网络调参方法/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>coisini</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年11月14日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2025/01/14/CAPTAIN%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" title="Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
