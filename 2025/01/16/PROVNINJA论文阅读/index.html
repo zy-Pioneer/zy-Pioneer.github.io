@@ -19,26 +19,27 @@
   <meta name="author" content="coisini">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。 motivation“Grey” Nodes随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法">
+    <meta name="description" content="该论文提出了一个名为 PROVNINJA 的框架，用来设计和生成对抗性攻击，目的是规避基于系统溯源数据的机器学习检测器。系统溯源用于追踪系统中进程、文件、网络套接字等资源之间的操作和依赖关系，这些信息通过溯源图来表示。PROVNINJA的主要目标是伪装恶意行为，使它们看起来像正常系统操作，从而规避检测。   Introduction 基于溯源的ML检测器分析系统中详细的运行时数据，通过检测异常行为">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection">
-<meta property="og:url" content="http://example.com/2025/01/14/CAPTAIN%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:title" content="PROVNINJA论文阅读">
+<meta property="og:url" content="http://example.com/2025/01/16/PROVNINJA%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Coisini&#39;s Blog">
-<meta property="og:description" content="本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。 motivation“Grey” Nodes随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法">
+<meta property="og:description" content="该论文提出了一个名为 PROVNINJA 的框架，用来设计和生成对抗性攻击，目的是规避基于系统溯源数据的机器学习检测器。系统溯源用于追踪系统中进程、文件、网络套接字等资源之间的操作和依赖关系，这些信息通过溯源图来表示。PROVNINJA的主要目标是伪装恶意行为，使它们看起来像正常系统操作，从而规避检测。   Introduction 基于溯源的ML检测器分析系统中详细的运行时数据，通过检测异常行为">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png">
-<meta property="article:published_time" content="2025-01-13T17:00:13.000Z">
-<meta property="article:modified_time" content="2025-01-15T18:51:40.228Z">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728363715637-8e45fd21-7754-4328-ba74-b799609e6ec1.png">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728356583881-5460842d-8454-4719-9fcf-005055bd14aa.png">
+<meta property="article:published_time" content="2025-01-15T17:51:57.000Z">
+<meta property="article:modified_time" content="2025-01-15T17:51:57.000Z">
 <meta property="article:author" content="coisini">
 <meta property="article:tag" content="安全">
 <meta property="article:tag" content="入侵检测">
 <meta property="article:tag" content="PIDS">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728363715637-8e45fd21-7754-4328-ba74-b799609e6ec1.png">
   
   
   
-  <title>Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection - Coisini&#39;s Blog</title>
+  <title>PROVNINJA论文阅读 - Coisini&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +205,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection"></span>
+            <span id="subtitle" data-typed-text="PROVNINJA论文阅读"></span>
           
         </div>
 
@@ -215,8 +216,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-01-14 01:00" pubdate>
-          2025年1月14日 凌晨
+        <time datetime="2025-01-16 01:51" pubdate>
+          2025年1月16日 凌晨
         </time>
       </span>
     
@@ -227,7 +228,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          2.4k 字
         
       </span>
     
@@ -238,7 +239,7 @@
         
         
         
-          16 分钟
+          21 分钟
         
       </span>
     
@@ -275,65 +276,99 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection</h1>
+            <h1 id="seo-header">PROVNINJA论文阅读</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。</p>
-<h2 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h2><h3 id="“Grey”-Nodes"><a href="#“Grey”-Nodes" class="headerlink" title="“Grey” Nodes"></a>“<strong>Grey” Nodes</strong></h3><p>随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法与恶意的外部IP连接。传统系统通常会根据简单的信任度规则对节点进行分类，但过于粗糙的规则往往会导致误报或漏报。</p>
+                <p>该论文提出了一个名为 <strong>PROVNINJA</strong> 的框架，用来设计和生成对抗性攻击，目的是规避基于系统溯源<strong>数据的机器学习检测器。系统溯源用于追踪系统中进程、文件、网络套接字等资源之间的操作和依赖关系，这些信息通过</strong>溯源图来表示。PROVNINJA的主要目标是伪装恶意行为，使它们看起来像正常系统操作，从而规避检测。</p>
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728363715637-8e45fd21-7754-4328-ba74-b799609e6ec1.png" srcset="/img/loading.gif" lazyload></p>
+<h2 id="XliVX"> Introduction</h2>
+基于溯源的ML检测器分析系统中详细的运行时数据，通过检测异常行为来防御潜在的 APT 和无文件恶意软件等复杂攻击。然而，现有的基于溯源的ML检测器并未完全抵御攻击者可能使用的对抗性技术，攻击者可以设计看似正常的系统操作来绕过检测。这种情况下需要一个系统化的方法来生成对抗性攻击，使其既能够完成恶意目标，又能尽量不被检测器发现。
+
+<h2 id="I4E44">PROVNINJA的核心框架</h2>
+PROVNINJA通过三个关键阶段实现对抗性攻击的生成与实施：
+
+<h3 id="Gkur5"> 识别显眼事件</h3>
+显眼事件是指那些容易引起ML检测器注意的系统事件。这些事件可能具有以下特点：
+
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN通过引入更细粒度的标签（如将节点信任度设置为0到1之间的浮点数），能够更灵活地反映不同程度的信任，从而避免误报或漏报。</li>
+<li>在系统中出现频率较低（稀有性高）。</li>
+<li>对ML检测器的预测结果影响大。</li>
 </ul>
-<h3 id="依赖爆炸问题-Dependency-Explosion"><a href="#依赖爆炸问题-Dependency-Explosion" class="headerlink" title="依赖爆炸问题 (Dependency Explosion)"></a><strong>依赖爆炸问题 (Dependency Explosion)</strong></h3><p>依赖爆炸是指单个可疑事件可能导致大量系统实体被标记为可疑，尤其是在复杂的依赖链中。一个恶意事件可能引发整个依赖链上的实体被怀疑为恶意，而很多情况下这些实体其实是正常的。现有的解决方案大多采用简单的事件白名单或手动划分攻击阶段，但这些方法往往需要大量的应用程序&#x2F;操作系统的调试，无法在实际系统中大规模使用。</p>
+<h4 id="ASPp1"> 频率分析</h4>
+PROVNINJA通过计算系统事件的**规则性评分（Regularity Score）**来判断事件的稀有程度。规则性评分的公式如下：
+
+<p><img src="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728356583881-5460842d-8454-4719-9fcf-005055bd14aa.png" srcset="/img/loading.gif" lazyload></p>
+<p>通过计算每个事件的规则性评分，PROVNINJA可以识别出那些在系统活动中不常见的显眼事件，这些事件很容易引发检测器的警报。</p>
+<h4 id="cvvfp">图结构分析</h4>
+1. 事件的传递性影响
+
+<p>在系统中，某些事件可能会通过一条长路径传播影响。一个显眼事件往往是那些能引发后续多个操作的事件。例如：</p>
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN通过引入可调节的标签传播速率（Tag Propagation Rate），允许根据事件的类型和上下文来调整恶意标签的传播力度，从而防止不必要的传播引发依赖爆炸。</li>
+<li>如果进程A创建了进程B，而进程B执行了网络连接或修改了系统文件，那么进程A的行为会在之后通过进程B的操作对系统产生重大影响。</li>
+<li>如果某个事件（如进程创建、文件读写）位于路径的关键位置，它不仅影响直接相连的节点，还可能通过多个中介节点传递影响到系统的其他部分。</li>
 </ul>
-<h3 id="自定义警报触发问题-Customized-Alarm-Triggering"><a href="#自定义警报触发问题-Customized-Alarm-Triggering" class="headerlink" title="自定义警报触发问题 (Customized Alarm Triggering)"></a><strong>自定义警报触发问题 (Customized Alarm Triggering)</strong></h3><p>现有的基于规则的PIDS在触发警报时，通常对所有事件应用统一的规则和阈值。然而，在不同的情境下，同一种行为可能是正常的或恶意的。例如，<code>sshd</code>进程执行脚本是常见的行为，而<code>firefox</code>进程执行脚本则是异常的。传统的规则系统无法为不同的事件设定不同的阈值，从而容易导致漏报或误报。</p>
+<p>因此，具有<strong>广泛传递性</strong>的事件通常是显眼事件。攻击者可能希望通过替换这些事件来隐蔽攻击路径。</p>
+<hr>
+<ol start="2">
+<li>事件在路径中的位置</li>
+</ol>
+<p>在因果路径中，事件的相对位置非常重要。通常，<strong>位于因果路径关键位置</strong>的事件（例如路径的起点或中间位置）具有更高的显眼性，因为这些位置的事件可能直接影响后续事件的执行：</p>
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN引入了自适应警报触发机制，允许为不同的事件和进程设置特定的警报触发阈值，以区分正常行为和异常行为。通过这种自定义的阈值，CAPTAIN能够减少不必要的警报，并提高对异常行为的敏感性。</li>
+<li>如果某个事件发生在路径的起点，它通常是整个攻击链的触发点，且对于后续的攻击操作至关重要。</li>
+<li>中间节点的事件（例如创建关键进程或修改重要文件）也可能是显眼的，因为它们连接了路径的不同阶段，起到了承前启后的作用。</li>
 </ul>
-<h2 id="CAPTAIN-系统设计"><a href="#CAPTAIN-系统设计" class="headerlink" title="CAPTAIN 系统设计"></a>CAPTAIN 系统设计</h2><p><img src="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png" srcset="/img/loading.gif" lazyload></p>
-<p>CAPTAIN系统的设计主要分为两个部分：</p>
+<p>这些位置上的事件如果表现异常，就更容易被ML检测器捕捉到。</p>
+<ol start="3">
+<li>路径的长度和复杂度</li>
+</ol>
+<p><strong>路径的长度和复杂度</strong>也是判断事件显眼性的一个重要指标。通常，越长的路径包含的操作和依赖关系越多，检测器可能会更加关注这类复杂路径中的关键节点和事件：</p>
 <ul>
-<li><strong>检测模块（Detection Module）</strong>：负责处理审计日志，生成溯源图并进行实时入侵检测。</li>
-<li><strong>学习模块（Learning Module）</strong>：在训练阶段对检测模块进行优化，通过梯度下降算法自动调整自适应参数，以减少误报并提高检测精度。</li>
+<li>如果某个事件位于一条长路径的中间，它的异常行为可能会被放大，因为它可能影响到路径的多个下游节点。</li>
+<li>同样，如果一个路径包含多个高度依赖的节点或资源，这些资源之间的依赖关系越紧密，路径中的异常事件就越容易引起检测器的警觉。</li>
 </ul>
-<h3 id="检测模块的设计"><a href="#检测模块的设计" class="headerlink" title="检测模块的设计"></a><strong>检测模块的设计</strong></h3><p>检测模块的核心功能是通过标签传播对系统实体（进程、文件、网络连接等）进行实时监控和检测。该模块分为以下三个主要组件：</p>
-<h4 id="标签初始化（Tag-Initialization）"><a href="#标签初始化（Tag-Initialization）" class="headerlink" title="标签初始化（Tag Initialization）"></a><strong>标签初始化（Tag Initialization）</strong></h4><p>CAPTAIN为每个系统实体分配初始的安全标签。具体来说：</p>
+<ol start="4">
+<li>节点和边的重要性（图结构分析）</li>
+</ol>
+<p>在因果路径分析中，除了事件本身的位置和传递性，还可以通过图的结构特性来分析事件的重要性。通过分析图中的<strong>节点和边的中心性</strong>，可以判断某个节点（事件）是否在整个系统图中起到关键作用。例如：</p>
 <ul>
-<li>**数据标签 (Data Tags)**：表示系统实体的机密性和完整性。</li>
-<li>**代码标签 (Code Tags)**：仅用于进程，表示进程代码的可信度。</li>
+<li><strong>介数中心性（Betweenness Centrality）</strong>：介数中心性衡量一个节点在多条最短路径中的重要性。如果一个节点具有较高的介数中心性，说明该节点位于系统中多条重要路径的中间，连接着大量其他节点。这样的节点通常是显眼事件，因为它们控制着多个系统资源之间的交互。</li>
+<li><strong>度数中心性（Degree Centrality）</strong>：一个节点的度数表示它与其他节点相连的边数。如果一个节点的度数很高（即它连接了许多其他节点），那么该节点可能是一个系统中高度活跃的资源。如果该节点的行为在系统中不常见，它可能成为显眼事件，因为它与系统中的多个资源有关联，且容易影响其他节点的行为。</li>
 </ul>
-<p>系统实体首次出现在溯源图时，会根据其特征（如进程名、文件路径、IP地址等）分配初始标签。标签初始化的具体规则由自适应参数 <strong>A</strong> 决定，而该参数会在训练阶段根据反馈进行调整。</p>
-<h4 id="标签传播（Tag-Propagation）"><a href="#标签传播（Tag-Propagation）" class="headerlink" title="标签传播（Tag Propagation）"></a><strong>标签传播（Tag Propagation）</strong></h4><p>当系统中发生事件时，CAPTAIN会根据预定义的规则在节点之间传播标签。传播的方式有两种：</p>
+<p>这些图结构分析可以帮助确定哪些事件在系统行为中起到至关重要的作用，从而可能引起检测器的重点关注。</p>
+<h3 id="gL0XC">特征空间规避</h3>
+在特征空间规避中，PROVNINJA利用所谓的“**Gadget链**”来替换显眼事件。Gadget链是由一系列规则性较高的系统事件构成的，它们在系统中更加常见，因此替换后不会显得异常。
+
+<p>Gadget链的生成过程包括以下步骤：</p>
+<ol>
+<li><strong>寻找显眼事件的替代事件</strong>：PROVNINJA从“替代库”中寻找能够替代显眼事件的其他系统操作。替代事件必须符合两个条件：<ul>
+<li>保持攻击者的目标不变。例如，如果攻击者需要创建一个恶意进程，替代事件也应能实现相似的操作。</li>
+<li>替代事件应尽可能模仿正常的系统行为，避免引起检测器的警觉。</li>
+</ul>
+</li>
+<li><strong>生成Gadget链</strong>：有时，单个替代事件不足以完成复杂的攻击任务。PROVNINJA可以通过多个Gadget链的组合来替换显眼事件，这些链条连接了一系列常见的系统操作，从而有效地掩盖了恶意行为。</li>
+<li><strong>优化攻击路径</strong>：通过将显眼事件替换为更常见的事件，攻击路径在ML检测器看来更加像正常的系统活动。这样可以显著降低检测器对攻击的检测概率。</li>
+</ol>
+<p>在进行替换时，攻击者通过将显眼事件替换、攻击路径分散和路径加长（广度和深度）这些手段来混淆检测模型。</p>
+<h3 id="hCY3Z">问题空间实现</h3>
+这是将特征空间中的规避策略转换为实际系统行为的过程，即将Gadget链应用于真实系统。在这个阶段，PROVNINJA的主要挑战是如何将理论上的规避方法应用到现实的复杂系统环境中。
+
+<p><strong>问题空间的实现面临以下几大挑战</strong>：</p>
+<ol>
+<li><strong>保持攻击语义</strong>：在进行攻击时，替代事件必须能够实现与原始显眼事件相同的恶意目标。例如，如果原本的恶意事件需要创建某个进程或修改某个文件，替代事件也必须具备类似功能，否则攻击目标将无法达成。</li>
+<li><strong>处理系统环境差异</strong>：不同系统之间的配置和依赖关系可能会影响攻击实施。例如，一个系统在某个时间点的状态可能与在其他时间点有所不同，或系统运行的环境与攻击者的测试环境不一致，这些都可能影响攻击的实施。</li>
+<li><strong>事件的可实现性</strong>：某些替代事件或Gadget链在攻击者的测试环境中可能可行，但在目标系统中却可能因为权限不足、系统配置差异等问题而无法实际实现。因此，PROVNINJA需要通过实际的系统环境进行校验，确保攻击路径的可执行性。</li>
+</ol>
+<h2 id="vRqkN">威胁模型</h2>
+PROVNINJA框架被设计用于不同类型的威胁模型，其中主要包括三种类型：
+
 <ul>
-<li><strong>数据流传播</strong>：数据从源节点传播到目标节点（如进程读取文件时，文件的标签会影响进程的标签）。</li>
-<li><strong>控制流传播</strong>：进程间的交互也会传播标签（如进程执行另一个进程时，代码的可信度会传播）。</li>
+<li><strong>黑箱模型</strong>：攻击者无法直接访问或查询ML检测器的内部结构，但可以通过一些外部查询（如查询公开的程序执行频率）来推断系统行为。PROVNINJA在黑箱模型下主要依赖于从公开数据集中收集的行为数据，生成规避攻击。</li>
+<li><strong>白箱模型</strong>：攻击者对ML检测器的内部工作机制有完全了解，包括模型的架构和参数。在这种情况下，PROVNINJA可以通过工具（如GNNExplainer）来识别哪些事件对ML检测器的决策贡献最大，从而设计更有针对性的攻击路径。</li>
+<li><strong>盲箱模型</strong>：攻击者无法查询检测器，也无法获得系统的行为数据，只能基于公共数据集或对系统行为的推断来设计攻击。这是最为困难的模型。</li>
 </ul>
-<p>标签传播的强度由 <strong>传播速率参数 (G)</strong> 控制。CAPTAIN可以为每条边设置不同的传播速率，以防止标签不必要地过度传播，特别是在应对“依赖爆炸”问题时，传播速率的自适应调整尤为关键。</p>
-<h4 id="警报生成（Alarm-Generation）"><a href="#警报生成（Alarm-Generation）" class="headerlink" title="警报生成（Alarm Generation）"></a><strong>警报生成（Alarm Generation）</strong></h4><p>CAPTAIN系统会根据标签的变化触发安全警报。当标签传播到某个节点，并且该节点的标签值超过了设定的阈值时，就会触发相应的警报。警报触发规则由 <strong>阈值参数 (T)</strong> 控制，可以根据不同的事件类型和实体特征调整触发阈值。</p>
-<p>例如：</p>
-<ul>
-<li>当进程试图执行低完整性的代码时，系统可能会触发代码完整性相关的警报。</li>
-<li>当进程访问高机密性的数据时，系统会触发数据泄漏警报。</li>
-</ul>
-<p>CAPTAIN能够为不同类型的系统事件设置灵活的阈值，从而减少误报，同时确保检测到真正的威胁。</p>
-<h3 id="学习模块的设计"><a href="#学习模块的设计" class="headerlink" title="学习模块的设计"></a><strong>学习模块的设计</strong></h3><p>CAPTAIN的学习模块负责在训练阶段优化标签传播和警报触发的参数。通过对误报数据进行分析，该模块使用<strong>梯度下降算法</strong>来调整自适应参数（A, G, T），从而改进检测模块的性能。学习模块的主要功能包括：</p>
-<h4 id="损失函数的定义（Loss-Function）"><a href="#损失函数的定义（Loss-Function）" class="headerlink" title="损失函数的定义（Loss Function）"></a><strong>损失函数的定义（Loss Function）</strong></h4><p>学习模块使用一个损失函数来衡量系统的检测效果。损失函数由两部分组成：</p>
-<ul>
-<li><strong>误报项</strong>：用于惩罚错误触发的警报。如果某个事件不应触发警报但触发了，该项会增加损失值。</li>
-<li><strong>正则化项</strong>：用于避免系统过度宽松，确保系统对恶意活动仍然保持敏感。通过将当前参数与默认初始值之间的差距最小化，CAPTAIN能够在减少误报的同时保持对攻击的敏感性。</li>
-</ul>
-<h4 id="梯度计算（Gradient-Calculation）"><a href="#梯度计算（Gradient-Calculation）" class="headerlink" title="梯度计算（Gradient Calculation）"></a><strong>梯度计算（Gradient Calculation）</strong></h4><p>CAPTAIN将检测过程建模为可微分的函数，以便在训练过程中计算自适应参数的梯度。通过这些梯度，系统能够使用梯度下降算法不断更新参数，从而优化标签传播和警报生成规则。</p>
-<p>例如：</p>
-<ul>
-<li>对于节点的初始标签（A）的梯度，系统根据标签如何传播来调整初始值，以减少误报。</li>
-<li>对于边的传播速率（G），系统通过传播链上各节点的行为来计算传播速率的梯度，从而控制信息在系统中的传播程度。</li>
-<li>对于警报阈值（T），梯度用于调整系统对不同事件的敏感性，避免过多或过少的警报触发。</li>
-</ul>
-<h4 id="训练与测试流程"><a href="#训练与测试流程" class="headerlink" title="训练与测试流程"></a><strong>训练与测试流程</strong></h4><p>在训练阶段，CAPTAIN会基于良性数据进行训练。训练的结果是生成一个优化的自适应参数配置。在测试阶段，系统根据训练得出的最优参数对新的系统事件进行实时检测。</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+
                 
               </div>
             
@@ -382,8 +417,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection</div>
-      <div>http://example.com/2025/01/14/CAPTAIN论文阅读/</div>
+      <div>PROVNINJA论文阅读</div>
+      <div>http://example.com/2025/01/16/PROVNINJA论文阅读/</div>
     </div>
     <div class="license-meta">
       
@@ -395,7 +430,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年1月14日</div>
+          <div>2025年1月16日</div>
         </div>
       
       
@@ -427,9 +462,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/01/16/AFGRL%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" title="AFGRL阅读笔记">
+                      <a href="/2025/01/16/P2IM_%20Scalable%20and%20Hardware-independent%20Firmware%20Testing%20via%20Automatic%20Peripheral%20Interface%20Modeling/" title="P2IM:Scalable and Hardware-independent Firmware Testing via Automatic Peripheral Interface Modeling">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">AFGRL阅读笔记</span>
+                        <span class="hidden-mobile">P2IM:Scalable and Hardware-independent Firmware Testing via Automatic Peripheral Interface Modeling</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -437,8 +472,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/11/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82%E6%96%B9%E6%B3%95/" title="神经网络调参技巧">
-                        <span class="hidden-mobile">神经网络调参技巧</span>
+                      <a href="/2025/01/16/%E5%9F%BA%E4%BA%8E%E4%BB%BF%E7%9C%9F%E7%9A%84%E6%B5%8B%E8%AF%95%E6%96%B9%E6%B3%95/" title="IOT固件仿真测试方法">
+                        <span class="hidden-mobile">IOT固件仿真测试方法</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

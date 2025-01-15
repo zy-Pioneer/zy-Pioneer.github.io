@@ -19,26 +19,37 @@
   <meta name="author" content="coisini">
   <meta name="keywords" content="">
   
-    <meta name="description" content="本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。 motivation“Grey” Nodes随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法">
+    <meta name="description" content="摘要基于内存的动态图神经网络 (MDGNN)十分有效，但是存在一个比较致命的问题： 在一个时间窗口内的事件，其中的时间依赖关系无法捕捉 背景知识（TGN的memory机制解释）之前实现的MAGIC，是在静态图上进行处理，一次性加载完所有的数据。而动态图的特点在于动态，图的信息是不断扩展动态变化的，图并不是一次全部加载完全，而是每次只加载一个时间窗口中的事件，也就是边。 那么如何去捕获每个窗口之间的">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection">
-<meta property="og:url" content="http://example.com/2025/01/14/CAPTAIN%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:title" content="PRES阅读笔记">
+<meta property="og:url" content="http://example.com/2025/01/16/PRES%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Coisini&#39;s Blog">
-<meta property="og:description" content="本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。 motivation“Grey” Nodes随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法">
+<meta property="og:description" content="摘要基于内存的动态图神经网络 (MDGNN)十分有效，但是存在一个比较致命的问题： 在一个时间窗口内的事件，其中的时间依赖关系无法捕捉 背景知识（TGN的memory机制解释）之前实现的MAGIC，是在静态图上进行处理，一次性加载完所有的数据。而动态图的特点在于动态，图的信息是不断扩展动态变化的，图并不是一次全部加载完全，而是每次只加载一个时间窗口中的事件，也就是边。 那么如何去捕获每个窗口之间的">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png">
-<meta property="article:published_time" content="2025-01-13T17:00:13.000Z">
-<meta property="article:modified_time" content="2025-01-15T18:51:40.228Z">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/92c8f93e.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/2d88de91.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/f616b3f1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/02ce2897.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/4076c791.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/bb9aa082.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/8ad26fbb.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/20f8e7aa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/e8cddf5d.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/774320c1.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/e30f87e2.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/6eeb6afa.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/3f208881.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/14c6d51b.png">
+<meta property="article:published_time" content="2025-01-15T17:51:46.000Z">
+<meta property="article:modified_time" content="2025-01-15T17:51:46.000Z">
 <meta property="article:author" content="coisini">
-<meta property="article:tag" content="安全">
-<meta property="article:tag" content="入侵检测">
-<meta property="article:tag" content="PIDS">
+<meta property="article:tag" content="图神经网络">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/92c8f93e.png">
   
   
   
-  <title>Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection - Coisini&#39;s Blog</title>
+  <title>PRES阅读笔记 - Coisini&#39;s Blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -204,7 +215,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection"></span>
+            <span id="subtitle" data-typed-text="PRES阅读笔记"></span>
           
         </div>
 
@@ -215,8 +226,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2025-01-14 01:00" pubdate>
-          2025年1月14日 凌晨
+        <time datetime="2025-01-16 01:51" pubdate>
+          2025年1月16日 凌晨
         </time>
       </span>
     
@@ -227,7 +238,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.9k 字
+          1.4k 字
         
       </span>
     
@@ -238,7 +249,7 @@
         
         
         
-          16 分钟
+          12 分钟
         
       </span>
     
@@ -275,65 +286,68 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection</h1>
+            <h1 id="seo-header">PRES阅读笔记</h1>
             
             
               <div class="markdown-body">
                 
-                <p>本文提出了一种名为CAPTAIN的基于规则的溯源入侵检测系统，该系统旨在解决现有PIDS面临的高误报率和难以适应不同环境等问题。</p>
-<h2 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h2><h3 id="“Grey”-Nodes"><a href="#“Grey”-Nodes" class="headerlink" title="“Grey” Nodes"></a>“<strong>Grey” Nodes</strong></h3><p>随着云计算的普及，很多合法的网络连接和云服务（如AWS Lambda、Cloudflare Workers）被广泛使用，但攻击者也可以利用这些服务作为其命令与控制（C2）服务器的中介。这使得现有的基于规则的PIDS难以区分合法与恶意的外部IP连接。传统系统通常会根据简单的信任度规则对节点进行分类，但过于粗糙的规则往往会导致误报或漏报。</p>
+                <h2 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h2><p>基于内存的动态图神经网络 (MDGNN)十分有效，但是存在一个比较致命的问题：</p>
+<p><strong>在一个时间窗口内的事件，其中的时间依赖关系无法捕捉</strong></p>
+<h2 id="背景知识（TGN的memory机制解释）"><a href="#背景知识（TGN的memory机制解释）" class="headerlink" title="背景知识（TGN的memory机制解释）"></a>背景知识（TGN的memory机制解释）</h2><p>之前实现的MAGIC，是在静态图上进行处理，一次性加载完所有的数据。而动态图的特点在于动态，图的信息是不断扩展动态变化的，图并不是一次全部加载完全，而是每次只加载一个时间窗口中的事件，也就是边。</p>
+<p>那么如何去捕获每个窗口之间的信息呢，在TGN中，它通过在每个时间窗口中计算节点的状态（这个状态由当前窗口中的事件以及上一时刻的状态决定），这个状态就称作memory，这个memory就代表了这个节点的历史信息，这样就能够捕获每个节点从出生到当前状态的所有信息。</p>
+<p>下面详细解释一下节点memory的更新过程：</p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/92c8f93e.png" srcset="/img/loading.gif" lazyload alt="图1"></p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/2d88de91.png" srcset="/img/loading.gif" lazyload alt="图2"></p>
+<p>如图2所示，整个TGN的核心就在这个TGNMemory，它维护了三个结构，分别是memory、msg_s_store（源节点的msg存储）和msg_d_store（目标节点的msg存储）。先计算msg：对于batch中的src和dst分别计算一次msg（视为无向图），每次msg计算如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs python">raw_msg = torch.cat(raw_msg, dim=<span class="hljs-number">0</span>)<br>t_rel = t - <span class="hljs-variable language_">self</span>.last_update[src]<br>t_enc = <span class="hljs-variable language_">self</span>.time_enc(t_rel.to(raw_msg.dtype))<br><br>msg = msg_module(<span class="hljs-variable language_">self</span>.memory[src], <span class="hljs-variable language_">self</span>.memory[dst], raw_msg, t_enc)<br></code></pre></td></tr></table></figure>
+
+<p>这里的raw_msg就是msg_s_store或msg_d_store，取决于是计算src的msg还是dst的msg</p>
+<p>计算完msg之后，在当前时间窗口中，对每个节点聚合和它交互的边，这个聚合操作可以自定义，在TGN中它的实现是选择最新的那条边，其他边就扔掉了（这也就是PERS这篇论文中想解决的问题，处理一个时间窗口中的时间顺序关系），将选择的那条边对应的msg和当前状态的memory一起送进GRU（一种循环神经网络，可以捕获msg和memory的序列特征）中，来更新memory。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><h3 id="现有工作存在的问题"><a href="#现有工作存在的问题" class="headerlink" title="现有工作存在的问题"></a>现有工作存在的问题</h3><ol>
+<li>MDGNN无法维持同一批次（时间窗口）内的数据点之间的时间依赖性，因此常常选择较小的时间窗口。</li>
+<li>较小的时间窗口无法有效利用计算资源，因此解决批量大小瓶颈对于计算资源的利用至关重要。</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/f616b3f1.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="本文完成的工作"><a href="#本文完成的工作" class="headerlink" title="本文完成的工作"></a>本文完成的工作</h3><ol>
+<li>进行了数学分析，证明了大时间窗口比小时间窗口更好（全文基本上都是数学分析，公式占了一半的篇幅，实在是看不太明白）</li>
+<li>设计了一种新颖的框架来改善小时间窗口的问题</li>
+<li>进行了实验，证明了本文提出的工作效果好</li>
+</ol>
+<h2 id="PERS-METHOD"><a href="#PERS-METHOD" class="headerlink" title="PERS METHOD"></a>PERS METHOD</h2><h3 id="方法总览"><a href="#方法总览" class="headerlink" title="方法总览"></a>方法总览</h3><p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/02ce2897.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/4076c791.png" srcset="/img/loading.gif" lazyload></p>
+<p>整篇文章的目的是对上式的右半边进行优化，右半边的值越小越好，其中最具影响力的两个因素是μ和σ<sub>max</sub>，因此本文就是为了去增大μ并减小σ<sub>max</sub>，提出了两个方向的改进措施<sup></sup>。</p>
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN通过引入更细粒度的标签（如将节点信任度设置为0到1之间的浮点数），能够更灵活地反映不同程度的信任，从而避免误报或漏报。</li>
+<li>ITERATIVE PREDICTION-CORRECTION SCHEME（优化第二项）</li>
+<li>MEMORY COHERENCE SMOOTHING（优化第一项）</li>
 </ul>
-<h3 id="依赖爆炸问题-Dependency-Explosion"><a href="#依赖爆炸问题-Dependency-Explosion" class="headerlink" title="依赖爆炸问题 (Dependency Explosion)"></a><strong>依赖爆炸问题 (Dependency Explosion)</strong></h3><p>依赖爆炸是指单个可疑事件可能导致大量系统实体被标记为可疑，尤其是在复杂的依赖链中。一个恶意事件可能引发整个依赖链上的实体被怀疑为恶意，而很多情况下这些实体其实是正常的。现有的解决方案大多采用简单的事件白名单或手动划分攻击阶段，但这些方法往往需要大量的应用程序&#x2F;操作系统的调试，无法在实际系统中大规模使用。</p>
+<p>伪代码如下：</p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/bb9aa082.png" srcset="/img/loading.gif" lazyload></p>
+<h3 id="ITERATIVE-PREDICTION-CORRECTION-SCHEME（迭代预测校正）"><a href="#ITERATIVE-PREDICTION-CORRECTION-SCHEME（迭代预测校正）" class="headerlink" title="ITERATIVE PREDICTION-CORRECTION SCHEME（迭代预测校正）"></a>ITERATIVE PREDICTION-CORRECTION SCHEME（迭代预测校正）</h3><h4 id="概念定义：pending-events"><a href="#概念定义：pending-events" class="headerlink" title="概念定义：pending events"></a>概念定义：pending events</h4><p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/8ad26fbb.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="背景知识：Gaussian-Mixture-Model"><a href="#背景知识：Gaussian-Mixture-Model" class="headerlink" title="背景知识：Gaussian Mixture Model"></a>背景知识：Gaussian Mixture Model</h4><p> GMM 假设数据点由多个高斯分布混合生成。每个高斯分布称为一个成分（component）。GMM 的概率密度函数是这些成分的加权和：  </p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/20f8e7aa.png" srcset="/img/loading.gif" lazyload></p>
+<p>因此GMM的参数包括：</p>
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN通过引入可调节的标签传播速率（Tag Propagation Rate），允许根据事件的类型和上下文来调整恶意标签的传播力度，从而防止不必要的传播引发依赖爆炸。</li>
+<li>每个成分的均值向量 μ<sub>i</sub> </li>
+<li>每个成分的协方差矩阵 Σ<sub>i</sub> </li>
+<li>每个成分的权重 π<sub>i</sub></li>
 </ul>
-<h3 id="自定义警报触发问题-Customized-Alarm-Triggering"><a href="#自定义警报触发问题-Customized-Alarm-Triggering" class="headerlink" title="自定义警报触发问题 (Customized Alarm Triggering)"></a><strong>自定义警报触发问题 (Customized Alarm Triggering)</strong></h3><p>现有的基于规则的PIDS在触发警报时，通常对所有事件应用统一的规则和阈值。然而，在不同的情境下，同一种行为可能是正常的或恶意的。例如，<code>sshd</code>进程执行脚本是常见的行为，而<code>firefox</code>进程执行脚本则是异常的。传统的规则系统无法为不同的事件设定不同的阈值，从而容易导致漏报或误报。</p>
+<p>接着使用 期望最大化（EM）算法来更新参数，其主要包含两个主要步骤：</p>
 <ul>
-<li><strong>解决方案动机：</strong> CAPTAIN引入了自适应警报触发机制，允许为不同的事件和进程设置特定的警报触发阈值，以区分正常行为和异常行为。通过这种自定义的阈值，CAPTAIN能够减少不必要的警报，并提高对异常行为的敏感性。</li>
+<li><strong>E 步（期望步）</strong>：计算每个数据点属于每个成分的概率，即责任度（responsibility）。</li>
+<li><strong>M 步（最大化步）</strong>：根据 E 步计算的责任度，重新估计参数。</li>
 </ul>
-<h2 id="CAPTAIN-系统设计"><a href="#CAPTAIN-系统设计" class="headerlink" title="CAPTAIN 系统设计"></a>CAPTAIN 系统设计</h2><p><img src="https://cdn.nlark.com/yuque/0/2024/png/46744832/1728365003605-d50496fe-3e23-4efe-a5f2-69526c0e18a8.png" srcset="/img/loading.gif" lazyload></p>
-<p>CAPTAIN系统的设计主要分为两个部分：</p>
-<ul>
-<li><strong>检测模块（Detection Module）</strong>：负责处理审计日志，生成溯源图并进行实时入侵检测。</li>
-<li><strong>学习模块（Learning Module）</strong>：在训练阶段对检测模块进行优化，通过梯度下降算法自动调整自适应参数，以减少误报并提高检测精度。</li>
-</ul>
-<h3 id="检测模块的设计"><a href="#检测模块的设计" class="headerlink" title="检测模块的设计"></a><strong>检测模块的设计</strong></h3><p>检测模块的核心功能是通过标签传播对系统实体（进程、文件、网络连接等）进行实时监控和检测。该模块分为以下三个主要组件：</p>
-<h4 id="标签初始化（Tag-Initialization）"><a href="#标签初始化（Tag-Initialization）" class="headerlink" title="标签初始化（Tag Initialization）"></a><strong>标签初始化（Tag Initialization）</strong></h4><p>CAPTAIN为每个系统实体分配初始的安全标签。具体来说：</p>
-<ul>
-<li>**数据标签 (Data Tags)**：表示系统实体的机密性和完整性。</li>
-<li>**代码标签 (Code Tags)**：仅用于进程，表示进程代码的可信度。</li>
-</ul>
-<p>系统实体首次出现在溯源图时，会根据其特征（如进程名、文件路径、IP地址等）分配初始标签。标签初始化的具体规则由自适应参数 <strong>A</strong> 决定，而该参数会在训练阶段根据反馈进行调整。</p>
-<h4 id="标签传播（Tag-Propagation）"><a href="#标签传播（Tag-Propagation）" class="headerlink" title="标签传播（Tag Propagation）"></a><strong>标签传播（Tag Propagation）</strong></h4><p>当系统中发生事件时，CAPTAIN会根据预定义的规则在节点之间传播标签。传播的方式有两种：</p>
-<ul>
-<li><strong>数据流传播</strong>：数据从源节点传播到目标节点（如进程读取文件时，文件的标签会影响进程的标签）。</li>
-<li><strong>控制流传播</strong>：进程间的交互也会传播标签（如进程执行另一个进程时，代码的可信度会传播）。</li>
-</ul>
-<p>标签传播的强度由 <strong>传播速率参数 (G)</strong> 控制。CAPTAIN可以为每条边设置不同的传播速率，以防止标签不必要地过度传播，特别是在应对“依赖爆炸”问题时，传播速率的自适应调整尤为关键。</p>
-<h4 id="警报生成（Alarm-Generation）"><a href="#警报生成（Alarm-Generation）" class="headerlink" title="警报生成（Alarm Generation）"></a><strong>警报生成（Alarm Generation）</strong></h4><p>CAPTAIN系统会根据标签的变化触发安全警报。当标签传播到某个节点，并且该节点的标签值超过了设定的阈值时，就会触发相应的警报。警报触发规则由 <strong>阈值参数 (T)</strong> 控制，可以根据不同的事件类型和实体特征调整触发阈值。</p>
-<p>例如：</p>
-<ul>
-<li>当进程试图执行低完整性的代码时，系统可能会触发代码完整性相关的警报。</li>
-<li>当进程访问高机密性的数据时，系统会触发数据泄漏警报。</li>
-</ul>
-<p>CAPTAIN能够为不同类型的系统事件设置灵活的阈值，从而减少误报，同时确保检测到真正的威胁。</p>
-<h3 id="学习模块的设计"><a href="#学习模块的设计" class="headerlink" title="学习模块的设计"></a><strong>学习模块的设计</strong></h3><p>CAPTAIN的学习模块负责在训练阶段优化标签传播和警报触发的参数。通过对误报数据进行分析，该模块使用<strong>梯度下降算法</strong>来调整自适应参数（A, G, T），从而改进检测模块的性能。学习模块的主要功能包括：</p>
-<h4 id="损失函数的定义（Loss-Function）"><a href="#损失函数的定义（Loss-Function）" class="headerlink" title="损失函数的定义（Loss Function）"></a><strong>损失函数的定义（Loss Function）</strong></h4><p>学习模块使用一个损失函数来衡量系统的检测效果。损失函数由两部分组成：</p>
-<ul>
-<li><strong>误报项</strong>：用于惩罚错误触发的警报。如果某个事件不应触发警报但触发了，该项会增加损失值。</li>
-<li><strong>正则化项</strong>：用于避免系统过度宽松，确保系统对恶意活动仍然保持敏感。通过将当前参数与默认初始值之间的差距最小化，CAPTAIN能够在减少误报的同时保持对攻击的敏感性。</li>
-</ul>
-<h4 id="梯度计算（Gradient-Calculation）"><a href="#梯度计算（Gradient-Calculation）" class="headerlink" title="梯度计算（Gradient Calculation）"></a><strong>梯度计算（Gradient Calculation）</strong></h4><p>CAPTAIN将检测过程建模为可微分的函数，以便在训练过程中计算自适应参数的梯度。通过这些梯度，系统能够使用梯度下降算法不断更新参数，从而优化标签传播和警报生成规则。</p>
-<p>例如：</p>
-<ul>
-<li>对于节点的初始标签（A）的梯度，系统根据标签如何传播来调整初始值，以减少误报。</li>
-<li>对于边的传播速率（G），系统通过传播链上各节点的行为来计算传播速率的梯度，从而控制信息在系统中的传播程度。</li>
-<li>对于警报阈值（T），梯度用于调整系统对不同事件的敏感性，避免过多或过少的警报触发。</li>
-</ul>
-<h4 id="训练与测试流程"><a href="#训练与测试流程" class="headerlink" title="训练与测试流程"></a><strong>训练与测试流程</strong></h4><p>在训练阶段，CAPTAIN会基于良性数据进行训练。训练的结果是生成一个优化的自适应参数配置。在测试阶段，系统根据训练得出的最优参数对新的系统事件进行实时检测。</p>
-<h3 id=""><a href="#" class="headerlink" title=""></a></h3>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/e8cddf5d.png" srcset="/img/loading.gif" lazyload></p>
+<h4 id="纠错机制"><a href="#纠错机制" class="headerlink" title="纠错机制"></a>纠错机制</h4><p>设置GMM的成分数为2，由于该论文中的场景是进行链接预测，因此它会进行正负采样，所以这里设置成分数为2，不太懂这个是怎么训练的，但是最终，这个GMM的作用是预测δ<sub>si</sub> 的分布，通过这个分布可以每次去生成一个预测的节点状态：</p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/774320c1.png" srcset="/img/loading.gif" lazyload></p>
+<p>之后为了拟合真实的考虑了时间的节点状态，作者使用参数γ去中和：</p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/e30f87e2.png" srcset="/img/loading.gif" lazyload></p>
+<p>这时得到的值就是进行纠错之后的节点状态，那么为什么是上面两个公式这样的形式呢，作者在附录中进行了推导（作者说明了这里的符号和论文其他部分不一致），证明了：</p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/6eeb6afa.png" srcset="/img/loading.gif" lazyload></p>
+<p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/3f208881.png" srcset="/img/loading.gif" lazyload></p>
+<p>也就是表明本文方法计算出的状态相对于未改进之前，更接近真实值，优化了方差的大小（不懂那个方差是啥，但它说是就是吧）</p>
+<h3 id="MEMORY-COHERENCE-SMOOTHING"><a href="#MEMORY-COHERENCE-SMOOTHING" class="headerlink" title="MEMORY COHERENCE SMOOTHING"></a>MEMORY COHERENCE SMOOTHING</h3><p><img src="https://raw.githubusercontent.com/zy-Pioneer/BlogImage/main/img/2025/01/14c6d51b.png" srcset="/img/loading.gif" lazyload></p>
+<p>这个内存一致性怎么计算的看不懂，也不太能看懂是个啥，看它的描述，上半部分应该是考虑了pending events时（考虑了时间依赖性）去更新节点状态计算的梯度和未考虑pending events去更新节点状态计算的梯度进行点积。也就是说，这个一致性在直观上来讲，它度量了理想的梯度下降方向和实际的梯度下降方向的一致程度。当它是正值的时候，表示方向一致（可能参数都是增加或者较小？），负值就表示方向相反。</p>
+
                 
               </div>
             
@@ -366,11 +380,7 @@
     <div class="post-meta">
       <i class="iconfont icon-tags"></i>
       
-        <a href="/tags/%E5%AE%89%E5%85%A8/" class="print-no-link">#安全</a>
-      
-        <a href="/tags/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B/" class="print-no-link">#入侵检测</a>
-      
-        <a href="/tags/PIDS/" class="print-no-link">#PIDS</a>
+        <a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#图神经网络</a>
       
     </div>
   
@@ -382,8 +392,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>Incorporating Gradients to Rules_ Towards Lightweight, Adaptive Provenance-based Intrusion Detection</div>
-      <div>http://example.com/2025/01/14/CAPTAIN论文阅读/</div>
+      <div>PRES阅读笔记</div>
+      <div>http://example.com/2025/01/16/PRES阅读笔记/</div>
     </div>
     <div class="license-meta">
       
@@ -395,7 +405,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2025年1月14日</div>
+          <div>2025年1月16日</div>
         </div>
       
       
@@ -427,9 +437,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2025/01/16/AFGRL%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" title="AFGRL阅读笔记">
+                      <a href="/2025/01/16/%E9%AB%98%E7%BA%A7%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" title="基于生成式人工智能增强手写数字识别的实验研究">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">AFGRL阅读笔记</span>
+                        <span class="hidden-mobile">基于生成式人工智能增强手写数字识别的实验研究</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -437,8 +447,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2024/11/14/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%B0%83%E5%8F%82%E6%96%B9%E6%B3%95/" title="神经网络调参技巧">
-                        <span class="hidden-mobile">神经网络调参技巧</span>
+                      <a href="/2025/01/16/AMCNet%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" title="AMCNet阅读笔记">
+                        <span class="hidden-mobile">AMCNet阅读笔记</span>
                         <span class="visible-mobile">下一篇</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
