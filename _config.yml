@@ -103,6 +103,7 @@ theme: hexo-theme-fluid
 # Deployment
 deploy:
   type: 'git'
-  repo: https://github.com/zy-Pioneer/zy-Pioneer.github.io.git 
+  # repo: https://github.com/zy-Pioneer/zy-Pioneer.github.io.git   
+  repo: ssh://git@github.com/zy-Pioneer/zy-Pioneer.github.io.git   
   branch: main
 
