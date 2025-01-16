@@ -1,0 +1,892 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=auto>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="coisini">
+  <meta name="keywords" content="">
+  
+    <meta name="description" content="Rootkit概述Rootkit是一种恶意软件或工具集合，专门用于隐藏攻击者或恶意程序在目标系统中的存在。它通过深入操作系统核心（如内核层）或控制系统关键组件，绕过传统的安全检测机制，使攻击者可以长期、隐蔽地控制受害系统。   Rootkit的定义Rootkit一词来源于”root”（超级用户权限）和”kit”（工具集）。其目标是获得并隐藏对系统的超级用户权限，防止被检测和移除。 核心功能 隐藏：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Rootkit与恶意代码防范">
+<meta property="og:url" content="http://example.com/2024/12/15/Rootkit%E4%B8%8E%E6%81%B6%E6%84%8F%E4%BB%A3%E7%A0%81%E9%98%B2%E8%8C%83/index.html">
+<meta property="og:site_name" content="Coisini&#39;s Blog">
+<meta property="og:description" content="Rootkit概述Rootkit是一种恶意软件或工具集合，专门用于隐藏攻击者或恶意程序在目标系统中的存在。它通过深入操作系统核心（如内核层）或控制系统关键组件，绕过传统的安全检测机制，使攻击者可以长期、隐蔽地控制受害系统。   Rootkit的定义Rootkit一词来源于”root”（超级用户权限）和”kit”（工具集）。其目标是获得并隐藏对系统的超级用户权限，防止被检测和移除。 核心功能 隐藏：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-14T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-14T16:00:00.000Z">
+<meta property="article:author" content="coisini">
+<meta property="article:tag" content="安全">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Rootkit与恶意代码防范 - Coisini&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Fluid</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Rootkit与恶意代码防范"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-15 00:00" pubdate>
+          2024年12月15日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.6k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          39 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Rootkit与恶意代码防范</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <h2 id="Rootkit概述"><a href="#Rootkit概述" class="headerlink" title="Rootkit概述"></a>Rootkit概述</h2><p><strong>Rootkit</strong>是一种恶意软件或工具集合，专门用于隐藏攻击者或恶意程序在目标系统中的存在。它通过深入操作系统核心（如内核层）或控制系统关键组件，绕过传统的安全检测机制，使攻击者可以长期、隐蔽地控制受害系统。  </p>
+<h3 id="Rootkit的定义"><a href="#Rootkit的定义" class="headerlink" title="Rootkit的定义"></a><strong>Rootkit的定义</strong></h3><p>Rootkit一词来源于”root”（超级用户权限）和”kit”（工具集）。其目标是获得并隐藏对系统的超级用户权限，防止被检测和移除。</p>
+<h4 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a><strong>核心功能</strong></h4><ul>
+<li><strong>隐藏</strong>：隐藏自身或其他恶意软件的进程、文件、网络连接等痕迹。</li>
+<li><strong>控制</strong>：提供攻击者对目标系统的远程访问和控制。</li>
+<li><strong>持久性</strong>：Rootkit可以在系统启动后自动加载，确保长期驻留。</li>
+</ul>
+<h3 id="Rootkit的主要类型"><a href="#Rootkit的主要类型" class="headerlink" title="Rootkit的主要类型"></a><strong>Rootkit的主要类型</strong></h3><p>Rootkit根据其运行的层级和隐藏的深度可分为以下几种类型：（用户级、内核级、引导级 Bootkit、硬件级、虚拟化级）</p>
+<h4 id="用户级Rootkit（User-level-Rootkit）"><a href="#用户级Rootkit（User-level-Rootkit）" class="headerlink" title="用户级Rootkit（User-level Rootkit）"></a><strong>用户级Rootkit（User-level Rootkit）</strong></h4><ul>
+<li><strong>描述</strong>： 用户级Rootkit主要通过修改用户态的操作环境来隐藏恶意活动，如修改或替换系统命令，劫持动态链接库、伪装成合法程序，利用钩子技术拦截或操纵系统调用</li>
+<li><strong>特点</strong>：<ul>
+<li>开发和部署成本低，不需要考虑内核差异（系统版本相同即可）</li>
+<li>权限受限，无法绕过内核安全机制和操作系统核心资源</li>
+<li>易被检测</li>
+</ul>
+</li>
+<li><strong>危害</strong>：<ul>
+<li>隐藏文件、进程和日志。</li>
+<li>窃取、伪造用户命令的输出。</li>
+<li>打开端口作为后门供远程控制，为后续攻击提供通道</li>
+</ul>
+</li>
+<li>检测方法<ul>
+<li>文件完整性检查（检查系统命令和库文件 hash 值和原始值是否有差异）</li>
+<li>检测是否存在隐藏进程或文件</li>
+<li>分析系统调用行为</li>
+</ul>
+</li>
+<li>清除方法<ul>
+<li>替换被修改的系统命令和库文件</li>
+<li>重装系统</li>
+</ul>
+</li>
+</ul>
+<h4 id="内核级Rootkit（Kernel-level-Rootkit）"><a href="#内核级Rootkit（Kernel-level-Rootkit）" class="headerlink" title="内核级Rootkit（Kernel-level Rootkit）"></a><strong>内核级Rootkit（Kernel-level Rootkit）</strong></h4><ul>
+<li><strong>描述</strong>： 内核级Rootkit直接运行在操作系统内核空间，拥有最高权限，可以绕过用户空间程序和安全软件的限制。  </li>
+<li><strong>特点</strong>：高权限、高隐蔽性、难以移除、高复杂性</li>
+<li><strong>危害</strong>：<ul>
+<li>系统安全完全失控，禁用安全机制和操作敏感数据</li>
+<li>长期隐蔽控制：难以被清除，可以长期存在</li>
+<li>系统稳定性降低：系统崩溃、性能下降甚至硬件损坏</li>
+</ul>
+</li>
+<li>检测方法：内核完整性检验、检测异常系统行为、使用外部可信设别扫描</li>
+<li>清除方法：卸载可疑内核模块、格式化硬盘并重装操作系统、使用可信启动防止恶意模块加载</li>
+</ul>
+<h4 id="引导级Rootkit（Bootkit）"><a href="#引导级Rootkit（Bootkit）" class="headerlink" title="引导级Rootkit（Bootkit）"></a><strong>引导级Rootkit（Bootkit）</strong></h4><ul>
+<li><strong>描述</strong>：<strong>引导型Rootkit</strong>是一种恶意软件，它通过感染系统的引导过程（如主引导记录 MBR 或 UEFI 固件）实现对操作系统的完全控制。引导型Rootkit在操作系统加载之前执行，其隐蔽性和破坏性极高，因为它能够在系统启动的最早阶段接管控制权，并隐藏其存在。  </li>
+<li><strong>特点</strong>：<ul>
+<li>在操作系统启动之前运行，规避大多数安全软件的检测。</li>
+<li>具有高隐蔽性和持久性（即使重装操作系统恶意代码依然存在）。</li>
+</ul>
+</li>
+<li>清除方法：<ul>
+<li>修复引导区域</li>
+<li>刷新固件</li>
+<li>全盘重装</li>
+</ul>
+</li>
+<li>防御方法：<ul>
+<li>启用安全启动，防止未经授权的引导加载程序执行</li>
+<li>定期更新固件和系统</li>
+<li>完整性检查</li>
+</ul>
+</li>
+</ul>
+<p>	</p>
+<h4 id="硬件-固件级Rootkit（Firmware-Rootkit）"><a href="#硬件-固件级Rootkit（Firmware-Rootkit）" class="headerlink" title="硬件&#x2F;固件级Rootkit（Firmware Rootkit）"></a><strong>硬件&#x2F;固件级Rootkit（Firmware Rootkit）</strong></h4><ul>
+<li><strong>描述</strong>：攻击固件（如BIOS、网络适配器固件）或嵌入式设备。</li>
+<li><strong>特点</strong>：<ul>
+<li>存在于硬件固件中，几乎不可检测。</li>
+<li>可通过重新刷写固件进行清除。</li>
+</ul>
+</li>
+<li><strong>危害</strong>：<ul>
+<li>在系统重装操作系统后依然存在。</li>
+<li>可操控硬件设备（如键盘记录）。</li>
+</ul>
+</li>
+<li>防御<ul>
+<li>物理安全防护</li>
+<li>供应链安全：确保硬件供应商可信</li>
+</ul>
+</li>
+</ul>
+<h4 id="虚拟化Rootkit（Hypervisor-level-Rootkit）"><a href="#虚拟化Rootkit（Hypervisor-level-Rootkit）" class="headerlink" title="虚拟化Rootkit（Hypervisor-level Rootkit）"></a><strong>虚拟化Rootkit（Hypervisor-level Rootkit）</strong></h4><ul>
+<li><strong>描述</strong>：在系统底层创建一个虚拟化层，将目标操作系统置于虚拟环境中运行。</li>
+<li><strong>特点</strong>：<ul>
+<li>高度隐蔽，难以察觉。</li>
+<li>能监控和操控操作系统的所有行为。</li>
+</ul>
+</li>
+<li><strong>危害</strong>：<ul>
+<li>实时拦截系统的输入&#x2F;输出。</li>
+<li>截获敏感信息（如用户密码）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="恶意代码类型及特点"><a href="#恶意代码类型及特点" class="headerlink" title="恶意代码类型及特点"></a>恶意代码类型及特点</h2><p>恶意代码（Malware）是一类旨在破坏计算机系统、窃取数据或干扰正常操作的恶意程序。根据其行为特点和传播方式，恶意代码可以分为以下几种主要类型：</p>
+<ul>
+<li><strong>计算机病毒（Computer Virus）</strong></li>
+<li><strong>蠕虫（Worm）</strong></li>
+<li><strong>特洛伊木马（Trojan Horse）</strong></li>
+<li><strong>勒索软件（Ransomware）</strong></li>
+<li><strong>僵尸程序（Botnet）</strong></li>
+<li><strong>后门程序（Backdoor）</strong></li>
+</ul>
+<p>总结：计算机病毒需要用户、需要程序作为载体、会复制、不会隐藏；蠕虫不需要用户、不需要载体、会复制、不会隐藏；木马不会复制、需要用户、不需要载体、会隐藏。rootkit 主要用于持久化、隐藏并为其他病毒打基础。勒索软件是一种木马，但它的目的是勒索钱财。</p>
+<hr>
+<p>病毒的生命周期：</p>
+<ol>
+<li>创造期：⿊客研制出病毒的恶意代码</li>
+<li>孕育期：⿊客将带有病毒的⽂件放在⼀些容易散播的地⽅，例如⽹站等</li>
+<li>潜伏感染期：病毒不断地繁殖和传染。病毒拥有很⻓的潜伏期有利于其⼴泛传播</li>
+<li>发病期：当触发病毒的条件满⾜时，病毒就执⾏其破坏性活动。有些病毒在某些特定的⽇期发作，还有些病毒通过倒计时或跟踪某些操作来触发⾃身</li>
+<li>根除期：如果防毒软件能够检测和控制这些病毒，病毒就有可能被发现、隔离或清除</li>
+</ol>
+<h3 id="计算机病毒（Computer-Virus）"><a href="#计算机病毒（Computer-Virus）" class="headerlink" title="计算机病毒（Computer Virus）"></a>计算机病毒（Computer Virus）</h3><p>攻击者在计算机程序中插⼊的、破坏计算机功能或者数据、影响计算机使⽤并能⾃我复制的⼀组计算机指令或者程序代码</p>
+<ul>
+<li><strong>特点</strong>：<ul>
+<li>需要宿主程序运行才能激活。</li>
+<li>能自我复制并感染其他文件或程序。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过文件共享、邮件附件或外部存储设备传播。</li>
+<li><strong>危害</strong>：可能删除数据、破坏文件或减慢系统性能。</li>
+</ul>
+<hr>
+<h3 id="蠕虫（Worm）"><a href="#蠕虫（Worm）" class="headerlink" title="蠕虫（Worm）"></a>蠕虫（Worm）</h3><p>⽆须计算机使⽤者⼲预即可运⾏的独⽴程序或代码，通过不断扫描⽹络上存在系统漏洞的节点主机并获取其控制权来进⾏传播。</p>
+<ul>
+<li><strong>特点</strong>：<ul>
+<li>不依赖宿主程序，自主运行并通过网络传播（攻击主动性）。</li>
+<li>消耗系统资源和网络带宽。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过网络漏洞、邮件链接等方式快速扩散。</li>
+<li><strong>危害</strong>：对网络和系统性能造成严重影响。</li>
+<li>分类：电子邮件蠕虫、互联网蠕虫、网络蠕虫、多介质蠕虫</li>
+</ul>
+<hr>
+<h3 id="木马病毒（Trojan-Horse）"><a href="#木马病毒（Trojan-Horse）" class="headerlink" title="木马病毒（Trojan Horse）"></a>木马病毒（Trojan Horse）</h3><p>⽊⻢程序可以将⾃⼰伪装成某种有⽤的应⽤程序来吸引⽤户下载或执⾏，危害⽤户计算机的安全，这是⼀种附着于正常程序或者单独存在的⼀类恶意程序。</p>
+<ul>
+<li><strong>特点</strong>：<ul>
+<li>伪装成合法程序，诱骗用户运行。</li>
+<li>不会自我复制，但常用来创建后门。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过软件安装包、钓鱼邮件等途径。</li>
+<li><strong>危害</strong>：窃取敏感数据、远程控制受害者设备。</li>
+<li>分类：远控型木马、Dropper 木马（加载或安装其他恶意软件的恶意程序）、Infostealer 木马（数据窃取型木马）、破坏型木马</li>
+</ul>
+<hr>
+<h3 id="勒索软件（Ransomware）"><a href="#勒索软件（Ransomware）" class="headerlink" title="勒索软件（Ransomware）"></a>勒索软件（Ransomware）</h3><p>勒索软件（Ransomware）是⼀种⽊⻢软件，通过锁定桌⾯、加密⽤户⽂件、限制访问管理⼯具或者禁⽤输⼊设备等⽅式阻⽌⽤户对计算机或其数据的正常使⽤，并向⽤户勒索钱财，声称在⽤户缴纳赎⾦之后才可恢复正常使⽤。</p>
+<ul>
+<li><strong>特点</strong>：<ul>
+<li>加密受害者数据，要求支付赎金以解锁。</li>
+<li>一旦感染，用户无法访问自己的文件。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过钓鱼邮件或恶意下载。</li>
+<li><strong>危害</strong>：数据丢失、经济损失。</li>
+<li>分类：锁定型勒索软件（禁用基本功能如键鼠等）、加密型勒索软件（加密数据）、恐吓型勒索软件（通过谎称令用户恐慌，从而进行支付）</li>
+</ul>
+<hr>
+<h3 id="僵尸程序（Botnet）"><a href="#僵尸程序（Botnet）" class="headerlink" title="僵尸程序（Botnet）"></a>僵尸程序（Botnet）</h3><ul>
+<li><strong>特点</strong>：<ul>
+<li>将受害设备变成“僵尸节点”，由攻击者远程控制。</li>
+<li>常被用于发动DDoS攻击、发送垃圾邮件。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过蠕虫或木马感染。</li>
+<li><strong>危害</strong>：网络瘫痪、资源消耗。</li>
+</ul>
+<hr>
+<h3 id="后门程序（Backdoor）"><a href="#后门程序（Backdoor）" class="headerlink" title="后门程序（Backdoor）"></a>后门程序（Backdoor）</h3><ul>
+<li><strong>特点</strong>：<ul>
+<li>绕过正常身份验证，在系统中创建隐秘的入口。</li>
+<li>常与其他恶意软件捆绑使用。</li>
+</ul>
+</li>
+<li><strong>传播方式</strong>：通过漏洞利用、特洛伊木马等植入。</li>
+<li><strong>危害</strong>：允许攻击者长期控制系统。</li>
+</ul>
+<hr>
+<h2 id="恶意代码防范技术"><a href="#恶意代码防范技术" class="headerlink" title="恶意代码防范技术"></a>恶意代码防范技术</h2><h3 id="软件漏洞防治"><a href="#软件漏洞防治" class="headerlink" title="软件漏洞防治"></a>软件漏洞防治</h3><p>软件漏洞防治主要⽅法主要为漏洞挖掘，主要包含以下三个⽅⾯：</p>
+<h4 id="基于源码的静态漏洞分析"><a href="#基于源码的静态漏洞分析" class="headerlink" title="基于源码的静态漏洞分析"></a>基于源码的静态漏洞分析</h4><ol>
+<li>基于中间表示的静态分析技术<ol>
+<li>原理：基于中间表示（IR）的静态分析技术通过将源代码转换为统一的抽象表示（如抽象语法树AST、控制流图CFG等），从而进行程序结构和语义的分析。IR消除了语言特性带来的复杂性，提供了更通用的分析平台，便于多语言支持和高效的漏洞检测。</li>
+<li>优缺点：语言无关性，支持多种语言统一分析；抽象性强，简化语法细节，关注核心语义；高效性，提供统一的数据结构，易于实现复杂分析。但检测能力受制于分析规则，且会产生误报，需要人力分析。</li>
+<li>数据流分析：沿着各种可能的控制流路径（程序执⾏路径）跟踪数据的各个定义点和使⽤点，并收集有关特定数据项属性信息。</li>
+<li>符号执行：符号执⾏是指在不执⾏程序的前提下，⽤符号值表示程序变量的值，模拟程序执⾏来进⾏相关分析的技术；⽤于探索给定程序空间中尽可能多的不同的程序路径。</li>
+<li>污点分析：将感兴趣的程序数据（外部输⼊数据或内部数据）标记为污点数据，通过跟踪污点数据在程序中的流向，检测这些数据是否会影响某些关键的操作。</li>
+</ol>
+</li>
+<li>基于逻辑推理的静态分析技术<ol>
+<li>原理：将源代码进⾏形式化的描述，利⽤推理、证明等数学⽅法验证或者发现形式化描述的⼀些性质，以此推断程序是否存在某种类型的漏洞。</li>
+<li>优缺点：分析有一定的严格性，相对更可靠；但难以将较大规模的程序进行完全的形式化，也存在误报和漏报，也需要人工分析</li>
+<li>模型检验：通常基于程序的有限状态模型，通过搜索模型的状态空间，检验该模型是否满⾜期望性质。可以只验证系统的部分形式化规格，⼀旦所检验的性质未被满⾜，则终⽌搜索并给出反例。（完全自动化，速度快，但存在状态空间爆炸的问题，且开销很大）</li>
+<li>定理证明：通过将验证问题转化为数学上的定理证明问题，判断待分析程序是否满⾜指定属性，是较为复杂但准确的⽅法。（验证准确但对人力要求严格）</li>
+</ol>
+</li>
+</ol>
+<h4 id="基于二进制码的静态漏洞分析"><a href="#基于二进制码的静态漏洞分析" class="headerlink" title="基于二进制码的静态漏洞分析"></a>基于二进制码的静态漏洞分析</h4><h5 id="基于模式的静态分析技术"><a href="#基于模式的静态分析技术" class="headerlink" title="基于模式的静态分析技术"></a>基于模式的静态分析技术</h5><ol>
+<li>原理：通过深⼊分析⼤量已知漏洞的⼆进制代码（或其反汇编代码）的特征，归纳其共性和规律，抽象出代码的漏洞模式。基于这些漏洞模式，可检测存在于其它代码中的同类漏洞。</li>
+<li>步骤：①⽣成并分析反汇编代码；②⽣成并分析中间表示（IR）代码；③ 建⽴漏洞模式；④ 基于漏洞模式检测漏洞。</li>
+</ol>
+<h5 id="基于⼆进制代码⽐对的静态分析技术"><a href="#基于⼆进制代码⽐对的静态分析技术" class="headerlink" title="基于⼆进制代码⽐对的静态分析技术"></a>基于⼆进制代码⽐对的静态分析技术</h5><ol>
+<li>基于⽂本⽐对：⼆进制代码、反汇编代码。</li>
+<li>基于图同构⽐对：CFG、DDG。</li>
+<li>基于结构化信息⽐对：关注逻辑结构的变化。</li>
+<li>基于综合⽐对：综合使⽤以上1~3种⽐对技术。</li>
+</ol>
+<h4 id="基于二进制码的动态漏洞分析"><a href="#基于二进制码的动态漏洞分析" class="headerlink" title="基于二进制码的动态漏洞分析"></a>基于二进制码的动态漏洞分析</h4><ol>
+<li>原理：通过跟踪⼆进制程序的执⾏，分析程序在运⾏时的内存读写操作、函数调⽤关系、内存分配&#x2F;释放等信息的⼀种漏洞检测⽅法，其主要技术为模糊测试。</li>
+</ol>
+<h3 id="恶意软件防治"><a href="#恶意软件防治" class="headerlink" title="恶意软件防治"></a>恶意软件防治</h3><h4 id="恶意代码逆向分析技术"><a href="#恶意代码逆向分析技术" class="headerlink" title="恶意代码逆向分析技术"></a>恶意代码逆向分析技术</h4><ol>
+<li>原理：软件的逆向分析是对软件开发过程的逆向，通过对低级形式的代码进⾏反汇编、反编译和动态调试等分析，得到其对应的⾼级形式。</li>
+<li>静态逆向分析技术：静态逆向分析将低级形式的⽬标代码变换为其⾼级易读形式（例如⾼级语⾔代码、结构图等），流程如下：<ol>
+<li>对⼆进制代码程序进⾏反汇编，得到其汇编代码；</li>
+<li>对汇编代码进⾏分析，或者进⼀步对汇编代码进⾏反编译，得到其对应的源代码并进⾏分析。</li>
+<li>在对灰白你代码或源代码进行静态分析时，通常需要提取代码的结构信息、语义信息和统计信息，例如函数调⽤图、程序切⽚、指令序列、API调⽤频次等。</li>
+</ol>
+</li>
+<li>动态逆向分析技术：通过控制和跟踪⽬标代码的执⾏，调试分析程序的⾏为和状态，以理解程序的逻辑和结构等。</li>
+<li>动态分析和静态分析的对比：</li>
+</ol>
+<p>优点：能准确地观测程序行为；获取真实的程序执行逻辑；获得程序执行过程中函数和指令参数的具体值。</p>
+<p>缺点：动态分析效果严重依赖于具体的程序输⼊，代码覆盖率低。</p>
+<h4 id="基本的恶意代码检测技术"><a href="#基本的恶意代码检测技术" class="headerlink" title="基本的恶意代码检测技术"></a>基本的恶意代码检测技术</h4><ol>
+<li>特征值检测：恶意代码的特征值是软件安全分析⼈员从恶意代码⽂件中提取的⼀段或多段特定的（独有的）⼆进制串数值串或字符串，⽤于唯⼀地标识它是哪个恶意代码。（只能检测已知攻击）</li>
+<li>校验和检测：对校验内容进行哈希，校验对象⼀般为：⽂件内容、⽂件属性、⽂件头部和系统数据。（可以识别已知和未知攻击，但无法确定具体的攻击类型）</li>
+<li>基于虚拟机的检测：对于一些采用多态和变形技术的恶意代码，在虚拟机中执行可以使其原本的恶意代码主体在虚拟机中暴露出来，对此恶意代码本体进行特征值检测。（检测环境与主机隔离；但资源开销较大，实现复杂）</li>
+</ol>
+<h4 id="基于AI的恶意代码检测"><a href="#基于AI的恶意代码检测" class="headerlink" title="基于AI的恶意代码检测"></a>基于AI的恶意代码检测</h4><p>基于AI的恶意代码的检测问题通常被转换为恶意代码和良性代码的⼆分类问题；恶意代码的类型识别（例如家族识别）问题通常被转换为恶意代码的多分类问题。通过建⽴对应模型，能有效解决恶意代码的检测和类型识别问题。</p>
+<h2 id="防范策略在信息系统安全中的应用"><a href="#防范策略在信息系统安全中的应用" class="headerlink" title="防范策略在信息系统安全中的应用"></a>防范策略在信息系统安全中的应用</h2><p>因为恶意软件由多种威胁组成，所以需要采取多处方法和技术来保卫系统。如采用防火墙来过滤潜在的破坏性代码，采用垃圾邮件过滤器、入侵检测系统、入侵防御系统等来加固网络，加强对破坏性代码的防御能力。</p>
+<ol>
+<li>正确使用电子邮件和Web</li>
+<li>确保在所有的桌面系统和服务器上安装最新的浏览器、操作系统、应用程序补丁，并确保垃圾邮件和浏览器的安全设置达到适当水平。</li>
+<li>确保安装所有的安全软件，并及时更新并且使用最新的威胁数据库。</li>
+<li>不要授权普通用户使用管理员权限，特别要注意不要让其下载和安装设备驱动程序，因为这正是许多恶意软件乘虚而入的方式。</li>
+<li>AI赋能的威胁检测产品</li>
+</ol>
+<p><strong>恶意代码检测：</strong>AI技术能够分析⽂件的静态特征（如⼆进制代码结构）和动态⾏为（运⾏时的操作序列），<strong>学习历史上已知恶意软件的模式，并基于此识别新的、未⻅过的恶意⽂件</strong>。AI 能够快速适应恶意软件的变种，对于零⽇攻击的检测尤其有效。通过持续训练，模型能够不断提升对恶意⽂件的识别准确率，减少误报和漏报。随着⼤模型的兴起，业界也在尝试采⽤⼤模型来进⾏恶意⽂件的检测，⽐如华清未央公司所发明的 MLM ⼤模型（机器语⾔⼤模型），就可以⽤来进⾏恶意代码的检测。</p>
+<p><strong>攻击流量检测：</strong>在攻击流量检测中，<strong>AI****技术通过对⽹络流量的实时分析，能够识别出异常的数据包和通信模式，</strong>这些往往与⽹络攻击相关。AI模型能够处理⼤量数据流，<strong>学习正常⽹络⾏为的复杂模式，并在此基础上识别出偏离常态的流量</strong>，⽐如DDoS攻击、恶意扫描、数据泄露尝试等。通过实时分析和模式匹配，AI能够即时触发警报并采取防御措施，保护⽹络免受攻击。业界现在有公司在开发AI智能体（AI Agent），⽤于做攻击流量的检测与⾃动处置。</p>
+<p><strong>加密流量分析：</strong>随着加密技术的普及，加密流量成为⽹络攻击隐藏的⼀种⼿段。AI通过<strong>分析加密流量的元数据（如流量⼤⼩、时间模式、连接频率等），在不解密内容的情况下识别异常流量。结合AI模型，系统可以学习加密流量的特征，识别出与恶意活动相关的模式</strong>，如恶意软件命令与控制通信、数据泄露等。这种⽅法在保护⽤户隐私的同时，提⾼了对加密流量中隐藏威胁的检测能⼒。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E4%BF%A1%E6%81%AF%E7%B3%BB%E7%BB%9F%E5%AE%89%E5%85%A8%E8%AF%BE%E7%A8%8B%E5%A4%8D%E4%B9%A0/" class="category-chain-item">信息系统安全课程复习</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AE%89%E5%85%A8/" class="print-no-link">#安全</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Rootkit与恶意代码防范</div>
+      <div>http://example.com/2024/12/15/Rootkit与恶意代码防范/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>coisini</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/15/Linux%E5%AE%89%E5%85%A8%E6%A8%A1%E5%9D%97LSM%E5%8F%8A%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6/" title="Linux安全模块LSM及访问控制">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Linux安全模块LSM及访问控制</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/12/15/Satcoms%20Threat%20Detection%20Summary/" title="Satcoms Threat Detection Summary">
+                        <span class="hidden-mobile">Satcoms Threat Detection Summary</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
