@@ -1,7 +1,7 @@
 ---
 title: AFGRL阅读笔记
-date: 2025-01-16 01:50:14
-updated: 2025-01-16 01:50:14
+date: 2024-08-02
+updated: 2024-08-02
 tags: [图神经网络]
 categories: [论文笔记] 
 ---

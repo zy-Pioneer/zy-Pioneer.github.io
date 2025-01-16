@@ -1,7 +1,7 @@
 ---
 title: P2IM:Scalable and Hardware-independent Firmware Testing via Automatic Peripheral Interface Modeling
-date: 2025-01-16 01:51:57
-updated: 2025-01-16 01:51:57
+date: 2024-11-15
+updated: 2024-11-15
 tags: [漏洞挖掘]
 categories: [论文笔记] 
 ---

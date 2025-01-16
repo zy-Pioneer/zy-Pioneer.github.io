@@ -1,7 +1,7 @@
 ---
 title: PRES阅读笔记
-date: 2025-01-16 01:51:46
-updated: 2025-01-16 01:51:46
+date: 2024-07-24
+updated: 2024-07-24
 tags: [图神经网络]
 categories: [论文笔记] 
 ---
