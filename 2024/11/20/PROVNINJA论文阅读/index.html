@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
@@ -17,12 +17,12 @@
   
   <meta name="theme-color" content="#2f4154">
   <meta name="author" content="coisini">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="生活,论文,笔记,技术">
   
     <meta name="description" content="该论文提出了一个名为 PROVNINJA 的框架，用来设计和生成对抗性攻击，目的是规避基于系统溯源数据的机器学习检测器。系统溯源用于追踪系统中进程、文件、网络套接字等资源之间的操作和依赖关系，这些信息通过溯源图来表示。PROVNINJA的主要目标是伪装恶意行为，使它们看起来像正常系统操作，从而规避检测。   Introduction 基于溯源的ML检测器分析系统中详细的运行时数据，通过检测异常行为">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PROVNINJA论文阅读">
-<meta property="og:url" content="http://example.com/2024/11/20/PROVNINJA%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
+<meta property="og:url" content="https://zy-pioneer.github.io/2024/11/20/PROVNINJA%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/index.html">
 <meta property="og:site_name" content="Coisini&#39;s Blog">
 <meta property="og:description" content="该论文提出了一个名为 PROVNINJA 的框架，用来设计和生成对抗性攻击，目的是规避基于系统溯源数据的机器学习检测器。系统溯源用于追踪系统中进程、文件、网络套接字等资源之间的操作和依赖关系，这些信息通过溯源图来表示。PROVNINJA的主要目标是伪装恶意行为，使它们看起来像正常系统操作，从而规避检测。   Introduction 基于溯源的ML检测器分析系统中详细的运行时数据，通过检测异常行为">
 <meta property="og:locale" content="zh_CN">
@@ -77,7 +77,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"zy-pioneer.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -87,6 +87,17 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -103,7 +114,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Coisini</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -418,7 +429,7 @@ PROVNINJA框架被设计用于不同类型的威胁模型，其中主要包括�
   <div class="license-box my-3">
     <div class="license-title">
       <div>PROVNINJA论文阅读</div>
-      <div>http://example.com/2024/11/20/PROVNINJA论文阅读/</div>
+      <div>https://zy-pioneer.github.io/2024/11/20/PROVNINJA论文阅读/</div>
     </div>
     <div class="license-meta">
       
@@ -462,9 +473,9 @@ PROVNINJA框架被设计用于不同类型的威胁模型，其中主要包括�
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2024/12/14/%E5%86%97%E4%BD%99%E5%AE%B9%E9%94%99%E6%8A%80%E6%9C%AF/" title="冗余容错技术">
+                      <a href="/2024/12/14/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8/" title="人工智能模型安全">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">冗余容错技术</span>
+                        <span class="hidden-mobile">人工智能模型安全</span>
                         <span class="visible-mobile">上一篇</span>
                       </a>
                     
@@ -576,7 +587,7 @@ PROVNINJA框架被设计用于不同类型的威胁模型，其中主要包括�
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://github.com/zy-Pioneer" target="_blank" rel="nofollow noopener"><span>Coisini</span></a> <i class="iconfont icon-love"></i> <span>zmx</span> 
     </div>
   
   

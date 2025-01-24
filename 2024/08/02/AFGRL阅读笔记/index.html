@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
@@ -17,12 +17,12 @@
   
   <meta name="theme-color" content="#2f4154">
   <meta name="author" content="coisini">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="生活,论文,笔记,技术">
   
     <meta name="description" content="Abstract提出了一种新颖的无增强图自监督学习框架，节点粒度的工作（个人感觉已经不像是对比学习了，不需要负例，只需要最小化正例之间的距离） Introduction在对比学习方法中，需要对数据进行增强来构造正负例，但是 image 和 graph 在数据特征上具有很大的不同：虽然增强在图像上得到了很好的定义，但它在图上的行为可能是任意的。例如，就图像而言，即使随机裁剪和旋转它们，或者扭曲它们的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="AFGRL阅读笔记">
-<meta property="og:url" content="http://example.com/2024/08/02/AFGRL%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="https://zy-pioneer.github.io/2024/08/02/AFGRL%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Coisini&#39;s Blog">
 <meta property="og:description" content="Abstract提出了一种新颖的无增强图自监督学习框架，节点粒度的工作（个人感觉已经不像是对比学习了，不需要负例，只需要最小化正例之间的距离） Introduction在对比学习方法中，需要对数据进行增强来构造正负例，但是 image 和 graph 在数据特征上具有很大的不同：虽然增强在图像上得到了很好的定义，但它在图上的行为可能是任意的。例如，就图像而言，即使随机裁剪和旋转它们，或者扭曲它们的">
 <meta property="og:locale" content="zh_CN">
@@ -83,7 +83,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"zy-pioneer.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -93,6 +93,17 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -109,7 +120,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Coisini</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -361,7 +372,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>AFGRL阅读笔记</div>
-      <div>http://example.com/2024/08/02/AFGRL阅读笔记/</div>
+      <div>https://zy-pioneer.github.io/2024/08/02/AFGRL阅读笔记/</div>
     </div>
     <div class="license-meta">
       
@@ -519,7 +530,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://github.com/zy-Pioneer" target="_blank" rel="nofollow noopener"><span>Coisini</span></a> <i class="iconfont icon-love"></i> <span>zmx</span> 
     </div>
   
   

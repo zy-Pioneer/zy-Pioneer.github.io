@@ -1,7 +1,7 @@
 
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-default-color-scheme=auto>
+<html lang="zh-CN" data-default-color-scheme=dark>
 
 
 
@@ -17,12 +17,12 @@
   
   <meta name="theme-color" content="#2f4154">
   <meta name="author" content="coisini">
-  <meta name="keywords" content="">
+  <meta name="keywords" content="生活,论文,笔记,技术">
   
     <meta name="description" content="摘要基于内存的动态图神经网络 (MDGNN)十分有效，但是存在一个比较致命的问题： 在一个时间窗口内的事件，其中的时间依赖关系无法捕捉 背景知识（TGN的memory机制解释）之前实现的MAGIC，是在静态图上进行处理，一次性加载完所有的数据。而动态图的特点在于动态，图的信息是不断扩展动态变化的，图并不是一次全部加载完全，而是每次只加载一个时间窗口中的事件，也就是边。 那么如何去捕获每个窗口之间的">
 <meta property="og:type" content="article">
 <meta property="og:title" content="PRES阅读笔记">
-<meta property="og:url" content="http://example.com/2024/07/24/PRES%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:url" content="https://zy-pioneer.github.io/2024/07/24/PRES%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/index.html">
 <meta property="og:site_name" content="Coisini&#39;s Blog">
 <meta property="og:description" content="摘要基于内存的动态图神经网络 (MDGNN)十分有效，但是存在一个比较致命的问题： 在一个时间窗口内的事件，其中的时间依赖关系无法捕捉 背景知识（TGN的memory机制解释）之前实现的MAGIC，是在静态图上进行处理，一次性加载完所有的数据。而动态图的特点在于动态，图的信息是不断扩展动态变化的，图并不是一次全部加载完全，而是每次只加载一个时间窗口中的事件，也就是边。 那么如何去捕获每个窗口之间的">
 <meta property="og:locale" content="zh_CN">
@@ -87,7 +87,7 @@
   <script id="fluid-configs">
     var Fluid = window.Fluid || {};
     Fluid.ctx = Object.assign({}, Fluid.ctx)
-    var CONFIG = {"hostname":"example.com","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+    var CONFIG = {"hostname":"zy-pioneer.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
 
     if (CONFIG.web_analytics.follow_dnt) {
       var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
@@ -97,6 +97,17 @@
   <script  src="/js/utils.js" ></script>
   <script  src="/js/color-schema.js" ></script>
   
+
+  
+
+  
+
+  
+
+  
+
+  
+
 
 
   
@@ -113,7 +124,7 @@
   <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
   <div class="container">
     <a class="navbar-brand" href="/">
-      <strong>Fluid</strong>
+      <strong>Coisini</strong>
     </a>
 
     <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
@@ -393,7 +404,7 @@
   <div class="license-box my-3">
     <div class="license-title">
       <div>PRES阅读笔记</div>
-      <div>http://example.com/2024/07/24/PRES阅读笔记/</div>
+      <div>https://zy-pioneer.github.io/2024/07/24/PRES阅读笔记/</div>
     </div>
     <div class="license-meta">
       
@@ -545,7 +556,7 @@
     <div class="footer-inner">
   
     <div class="footer-content">
-       <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+       <a href="https://github.com/zy-Pioneer" target="_blank" rel="nofollow noopener"><span>Coisini</span></a> <i class="iconfont icon-love"></i> <span>zmx</span> 
     </div>
   
   
