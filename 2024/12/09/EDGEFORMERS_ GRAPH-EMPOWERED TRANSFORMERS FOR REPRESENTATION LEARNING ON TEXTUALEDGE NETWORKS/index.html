@@ -1,0 +1,864 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="coisini">
+  <meta name="keywords" content="生活,论文,笔记,技术">
+  
+    <meta name="description" content="本篇文章通过借助GPT阅读论文，给出Prompt，并根据GPT的回答，总结论文。  Prompt 我是一名高校博士生，正在阅读图神经网络领域的论文，请你简要概括这篇文章的背景，创新点。接着细致的总结论文的方法部分为几个小点，并进行详细描述。然后将整个论文的流程总结出来，最后展示实验效果。  Abstract在社交网络&#x2F;信息网络中的边通常富含丰富的语义信息，例如用户和用户之间的聊天内容以及">
+<meta property="og:type" content="article">
+<meta property="og:title" content="EDGEFORMERS: GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS">
+<meta property="og:url" content="https://zy-pioneer.github.io/2024/12/09/EDGEFORMERS_%20GRAPH-EMPOWERED%20TRANSFORMERS%20FOR%20REPRESENTATION%20LEARNING%20ON%20TEXTUALEDGE%20NETWORKS/index.html">
+<meta property="og:site_name" content="Coisini&#39;s Blog">
+<meta property="og:description" content="本篇文章通过借助GPT阅读论文，给出Prompt，并根据GPT的回答，总结论文。  Prompt 我是一名高校博士生，正在阅读图神经网络领域的论文，请你简要概括这篇文章的背景，创新点。接着细致的总结论文的方法部分为几个小点，并进行详细描述。然后将整个论文的流程总结出来，最后展示实验效果。  Abstract在社交网络&#x2F;信息网络中的边通常富含丰富的语义信息，例如用户和用户之间的聊天内容以及">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-12-08T16:00:00.000Z">
+<meta property="article:modified_time" content="2024-12-08T16:00:00.000Z">
+<meta property="article:author" content="coisini">
+<meta property="article:tag" content="图神经网络">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>EDGEFORMERS: GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS - Coisini&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zy-pioneer.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Coisini</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="EDGEFORMERS: GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2024-12-09 00:00" pubdate>
+          2024年12月9日 凌晨
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          5.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          44 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">EDGEFORMERS: GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>本篇文章通过借助GPT阅读论文，给出Prompt，并根据GPT的回答，总结论文。</p>
+<blockquote>
+<p>Prompt</p>
+<p>我是一名高校博士生，正在阅读图神经网络领域的论文，请你简要概括这篇文章的背景，创新点。接着细致的总结论文的方法部分为几个小点，并进行详细描述。然后将整个论文的流程总结出来，最后展示实验效果。</p>
+</blockquote>
+<h2 id="Abstract"><a href="#Abstract" class="headerlink" title="Abstract"></a>Abstract</h2><p>在社交网络&#x2F;信息网络中的边通常富含丰富的语义信息，例如用户和用户之间的聊天内容以及用户对商品的评论等。但主流的 GNN 模型通常侧重于传播和聚合节点信息，或者仅将边信息初始化为特征向量，对边语义信息的利用不充分。因此本文提出了EDGEFORMERS 来改进这一不足。</p>
+<h2 id="Introduction"><a href="#Introduction" class="headerlink" title="Introduction"></a>Introduction</h2><blockquote>
+<p>Prompt</p>
+<p>请从学术汇报的角度，总结一下这篇文章的 Introduction 部分，从以下几个角度进行总结：1.研究任务是什么，2.存在的挑战有哪些 3.现有工作存在的问题 4.本文的核心贡献，对于每一点，更细致的来说：</p>
+<p>1.研究任务：该论文对应的领域是什么，如图神经网络、目标检测、人脸识别这些在学术科研比较热门的大方向；在这个领域下，面对的实际问题是什么，为什么这个问题值得研究；</p>
+<p>2.存在的挑战是什么：为了解决这个问题，需要解决哪些挑战</p>
+<p>3.现有工作存在的问题是什么</p>
+<p>4.为了解决这个问题，本论文的核心贡献是什么</p>
+<p>请按照以上思路针对这篇论文的 Introduction 进行总结</p>
+</blockquote>
+<h3 id="研究任务"><a href="#研究任务" class="headerlink" title="研究任务"></a>研究任务</h3><ul>
+<li><strong>领域背景</strong>：该论文的研究任务属于<strong>图神经网络（Graph Neural Networks，GNNs）</strong>的领域。GNNs是近年来在图数据学习中取得显著进展的一个研究方向，广泛应用于社交网络、推荐系统、知识图谱等领域。GNN的核心思想是通过节点间的信息传播来更新节点的表示，这种方法在处理图结构数据时展现出了很强的能力。</li>
+<li><strong>实际问题</strong>：在实际应用中，图的边不仅是连接节点的简单关系，还可能携带着丰富的<strong>文本信息</strong>，如用户对商品的评论、社交媒体中的消息、学术论文中的引用关系等。这些边文本信息通常包含了关于节点的进一步描述或者节点之间关系的更多细节。如果能够有效地将这些文本信息与图的结构信息结合起来，可以大幅提高图神经网络的表现，尤其是在<strong>边分类</strong>和<strong>链接预测</strong>等任务中。</li>
+<li><strong>研究的必要性</strong>：尽管GNN在处理节点之间的关系时非常成功，但它对包含丰富文本信息的边的处理能力相对较弱。现有的方法通常将边信息视为固定的结构特征，而忽视了边文本所携带的潜在语义信息。考虑到文本在图数据中的重要性，如何将边文本信息与网络结构信息有效结合，成为了该领域需要解决的一个关键问题。</li>
+</ul>
+<h3 id="存在的挑战"><a href="#存在的挑战" class="headerlink" title="存在的挑战"></a>存在的挑战</h3><p>为了解决将边文本信息与网络结构信息结合的问题，论文中提到的研究任务面临几个主要挑战：</p>
+<ul>
+<li><strong>文本信息的多样性和复杂性</strong>：边文本信息往往包含了丰富的语义信息，在不同的应用场景中，这些文本信息的格式、内容和意义各异。例如，在社交网络中，边的文本可能是用户之间的评论或消息，而在推荐系统中，则是用户对商品的评价。这些文本信息不仅包含用户的兴趣，还可能表达情感或偏好。如何对这些文本信息进行有效建模，以便与节点结构信息进行融合，是一个挑战。</li>
+<li><strong>边文本与节点结构的融合问题</strong>：现有的图神经网络方法主要关注如何通过节点传播信息来学习节点表示，但边文本信息往往被视为独立的特征进行处理。如何将边的文本信息与节点结构信息有效地结合，以便同时学习边的语义和图的结构，是一个亟待解决的难题。需要设计新的机制，在保证图结构信息的学习效果的同时，能够深度挖掘和融合边文本信息。</li>
+<li><strong>信息交互建模的复杂性</strong>：边文本和节点结构之间的交互关系非常复杂。例如，在推荐系统中，商品的文本描述和用户的行为数据需要被同时考虑，这要求模型能够同时处理结构化数据（如用户-商品交互）和非结构化数据（如商品评论文本）。如何在图神经网络框架下建模这种复杂的交互关系，是该领域中的一个关键挑战。</li>
+</ul>
+<h3 id="现有工作存在的问题"><a href="#现有工作存在的问题" class="headerlink" title="现有工作存在的问题"></a>现有工作存在的问题</h3><p>现有的图神经网络方法虽然在节点表示学习方面取得了显著进展，但在处理富文本边网络时存在以下问题：</p>
+<ul>
+<li><strong>忽视边的文本信息</strong>：许多现有的图神经网络方法将边视为简单的连接关系，仅依赖边的结构信息进行计算，忽略了边可能携带的文本信息。对于包含丰富文本的边（如评论、对话等），这种方法未能有效捕捉文本的语义信息，从而导致模型表现不佳。</li>
+<li><strong>边信息建模过于简单</strong>：一些方法尝试将边文本信息与节点结构信息结合，但通常只是通过简单的拼接或线性变换来处理边文本信息，缺乏对文本的深度建模。这些方法通常依赖于静态的预训练词向量（如Word2Vec）或简单的词袋模型，未能充分捕捉文本的上下文和动态语义。</li>
+<li><strong>节点与边之间的交互建模不足</strong>：虽然一些模型尝试将边文本信息引入到节点表征学习中，但它们往往缺乏有效的机制来同时建模节点间的结构信息和边的语义信息。大多数方法仅在节点特征传播过程中将边文本信息视作附加信息，而没有在模型的各个层次中深入交互，无法捕获文本与结构信息之间的复杂依赖。</li>
+</ul>
+<h3 id="本文的核心贡献"><a href="#本文的核心贡献" class="headerlink" title="本文的核心贡献"></a>本文的核心贡献</h3><p>为了克服现有方法的不足，本论文提出了一个新的框架——<strong>Edgeformers</strong>，特别是其中的 <strong>Edgeformer-E</strong> 模块，旨在有效结合<strong>边的文本信息</strong>和<strong>节点的网络结构信息</strong>，从而提升图神经网络在处理富文本图任务中的表现。本文的核心贡献如下：</p>
+<ul>
+<li><strong>创新的图增强Transformer结构</strong>：论文提出通过引入<strong>虚拟节点标记</strong>（virtual node tokens）来解决边文本与节点信息的融合问题。通过这种结构，模型能够在每一层Transformer中同时处理边的文本信息和节点的结构信息，确保边文本信息在图神经网络中的有效建模。</li>
+<li><strong>多头自注意力机制</strong>：在 <strong>Edgeformer-E</strong> 模块中，利用<strong>多头自注意力机制</strong>（Multi-Head Attention）并行计算边文本和节点信息之间的交互。每个注意力头在不同的子空间中捕捉不同类型的依赖关系，帮助模型从多个角度理解边文本与节点结构之间的复杂联系。</li>
+<li><strong>实验验证与效果</strong>：通过在多个公共数据集上的实验，论文展示了 <strong>Edgeformer-E</strong> 在边分类和链接预测任务中的优越性。实验结果表明，<strong>Edgeformer-E</strong> 在将边的文本信息与节点结构信息深度融合的过程中，能够显著提升任务的表现，超越了现有的基线方法。</li>
+</ul>
+<h2 id="Method"><a href="#Method" class="headerlink" title="Method"></a>Method</h2><blockquote>
+<p>请从学术汇报的角度，总结一下这篇文章的 method 部分，从以下几个角度进行总结：1.方法的整体框架 2.框架中每一模块的描述，对于每一点，更细致的来说：</p>
+<p>1.方法框架部分：从工程的角度来描述，数据从输入到输出，每一模块要衔接得当</p>
+<p>2.具体模块内容的介绍：上一模块的输出在这一模块中的具体处理方式是什么样的，每一模块的具体内容要描述的清晰明了</p>
+<p>请按照上述思路和要求总结论文的 method 部分</p>
+</blockquote>
+<h3 id="总体框架"><a href="#总体框架" class="headerlink" title="总体框架"></a>总体框架</h3><p>本论文提出的 <strong>Edgeformer-E</strong> 框架可以分为三个主要部分，每个部分通过不同的机制来解决图中<strong>节点信息</strong>和<strong>边文本信息</strong>的融合问题，进而提高图表示学习的效果。这三个部分分别是：</p>
+<ol>
+<li>**Edge Representation Learning (Edgeformer-E)**：描述如何将虚拟节点标记与富文本边信息进行融合，生成边的综合表示。</li>
+<li>**Text-Aware Node Representation Learning (Edgeformer-N)**：通过上一模块学习到的边表示来进一步学习节点表示。</li>
+<li><strong>Enhancing Edge Representations with the Node’s Local Network Structure</strong>：利用节点的局部网络结构信息，进一步增强边的表示。</li>
+</ol>
+<hr>
+<h3 id="EDGE-REPRESENTATION-LEARNING-EDGEFORMER-E"><a href="#EDGE-REPRESENTATION-LEARNING-EDGEFORMER-E" class="headerlink" title="EDGE REPRESENTATION LEARNING (EDGEFORMER-E)"></a><strong>EDGE REPRESENTATION LEARNING (EDGEFORMER-E)</strong></h3><h4 id="模块作用："><a href="#模块作用：" class="headerlink" title="模块作用："></a><strong>模块作用</strong>：</h4><p>该部分的核心任务是将<strong>虚拟节点标记</strong>与<strong>富文本边信息</strong>进行融合，生成边的最终表示。通过这种方式，模型能够同时考虑边的文本内容和边所连接节点的结构信息，从而生成更丰富的边表示。</p>
+<h4 id="具体操作："><a href="#具体操作：" class="headerlink" title="具体操作："></a><strong>具体操作</strong>：</h4><ul>
+<li><strong>虚拟节点标记引入</strong>：<br>对于每条边 $ e_{ij} $ 连接的两个节点 $ v_i $ 和 $ v_j $，模型为每个节点生成一个初始的低维表示 $ \mathbf{z}_i^{(0)} $ 和 $ \mathbf{z}_j^{(0)} $，然后使用可学习的映射矩阵 $ W_n^{(l)} $ 将其映射到高维空间：</li>
+</ul>
+<p>$ \mathbf{z}_i^{(l)} &#x3D; W_n^{(l)} \mathbf{z}_i^{(0)}, \quad \mathbf{z}_j^{(l)} &#x3D; W_n^{(l)} \mathbf{z}_j^{(0)} $</p>
+<ul>
+<li><strong>边文本信息与虚拟节点标记的融合</strong>：<br>在每一层Transformer中，边的文本嵌入序列 $ \mathbf{H}<em>{e</em>{ij}}^{(l)} $ 与虚拟节点标记 $ \mathbf{z}_i^{(l)} $ 和 $ \mathbf{z}_j^{(l)} $ 拼接形成新的输入序列：</li>
+</ul>
+<p>$ \tilde{\mathbf{H}}<em>{e</em>{ij}}^{(l)} &#x3D; [\mathbf{z}<em>i^{(l)}; \mathbf{z}<em>j^{(l)}; \mathbf{H}</em>{e</em>{ij}}^{(l)}] $</p>
+<p>  该拼接后的序列将通过多头自注意力机制进行处理，学习边文本信息和节点结构信息的交互。</p>
+<ul>
+<li><strong>多头自注意力机制（MHA）</strong>：<br>多头自注意力机制并行计算多个不同的注意力头，以从不同的子空间捕捉节点与边文本信息之间的复杂关系。这使得模型能够全面理解边的语义，并考虑节点之间的拓扑关系。</li>
+</ul>
+<hr>
+<h3 id="TEXT-AWARE-NODE-REPRESENTATION-LEARNING-EDGEFORMER-N"><a href="#TEXT-AWARE-NODE-REPRESENTATION-LEARNING-EDGEFORMER-N" class="headerlink" title="TEXT-AWARE NODE REPRESENTATION LEARNING (EDGEFORMER-N)"></a><strong>TEXT-AWARE NODE REPRESENTATION LEARNING (EDGEFORMER-N)</strong></h3><h4 id="模块作用：-1"><a href="#模块作用：-1" class="headerlink" title="模块作用："></a><strong>模块作用</strong>：</h4><p>在 <strong>Edgeformer-N</strong> 中，边的表示（由 <strong>Edgeformer-E</strong> 生成）将被用于进一步学习节点的表示。通过聚合相邻边的表示，节点可以获得更加丰富的特征表示，这些表示同时反映了节点的网络结构和边的文本信息。</p>
+<h4 id="具体操作：-1"><a href="#具体操作：-1" class="headerlink" title="具体操作："></a><strong>具体操作</strong>：</h4><ul>
+<li><strong>边表示的聚合</strong>：<br>每个节点的表示是通过聚合与该节点相关的边表示来获得的。例如，对于节点 $ v_i $，其表示 $ \mathbf{h}<em>{v_i} $ 是通过加权求和其相邻边的表示 $ \mathbf{h}</em>{e_{ij}} $ 得到的：</li>
+</ul>
+<p>$ \mathbf{h}<em>{v_i} &#x3D; \sum</em>{e_{ij} \in \text{Neighbor}(v_i)} \alpha_{e_{ij}, v_i} \mathbf{h}<em>{e</em>{ij}} $</p>
+<p>  其中，$ \alpha_{e_{ij}, v_i} $ 是边 $ e_{ij} $ 对节点 $ v_i $ 的影响权重，通常通过注意力机制来计算。</p>
+<ul>
+<li><strong>节点表示更新</strong>：<br>通过聚合边的表示，节点的最终表示能够捕捉到与该节点相邻边的文本信息和网络结构。这样的表示不仅反映了节点的局部网络信息，还融合了边文本信息。</li>
+</ul>
+<hr>
+<h3 id="Enhancing-Edge-Representations-with-the-Node’s-Local-Network-Structure"><a href="#Enhancing-Edge-Representations-with-the-Node’s-Local-Network-Structure" class="headerlink" title="Enhancing Edge Representations with the Node’s Local Network Structure"></a><strong>Enhancing Edge Representations with the Node’s Local Network Structure</strong></h3><h4 id="模块作用：-2"><a href="#模块作用：-2" class="headerlink" title="模块作用："></a><strong>模块作用</strong>：</h4><p>该部分的目标是利用节点的局部网络结构信息，进一步增强边的表示。通过结合节点的局部网络结构，模型能够提升边的语义表示，使得最终的边表示更为精确。</p>
+<h4 id="具体操作：-2"><a href="#具体操作：-2" class="headerlink" title="具体操作："></a><strong>具体操作</strong>：</h4><ul>
+<li><strong>局部网络结构增强</strong>：<br>对于每条边 $ e_{ij} $，在计算其表示时，除了考虑边文本信息，还引入节点的局部网络结构信息。具体地，节点 $ v_i $ 和 $ v_j $ 的局部网络结构（如邻居节点信息）会被作为附加信息，与边的文本表示一同输入到模型中，从而提高边表示的质量。</li>
+<li><strong>虚拟节点标记的进一步调整</strong>：<br>在 <strong>Edgeformer-E</strong> 中，虚拟节点标记被用来引入节点的网络信息，而在这个模块中，虚拟节点标记的表示会被进一步调整，以便更好地反映节点在局部网络中的作用。例如，虚拟节点标记的表示可以通过注意力机制进行调整，使得网络结构信息在边表示学习中得到更好的利用。</li>
+</ul>
+<hr>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a><strong>总结</strong></h3><p><strong>Edgeformer-E</strong> 框架通过三个主要模块逐步处理富文本图中的边表示学习任务：</p>
+<ol>
+<li><strong>Edgeformer-E</strong>：将虚拟节点标记与富文本边信息进行融合，生成边的综合表示。</li>
+<li><strong>Edgeformer-N</strong>：基于上一模块生成的边表示，进一步学习节点的表示。</li>
+<li><strong>Enhancing Edge Representations with the Node’s Local Network Structure</strong>：通过节点的局部网络结构信息进一步增强边的表示。</li>
+</ol>
+<h2 id="Evaluation"><a href="#Evaluation" class="headerlink" title="Evaluation"></a>Evaluation</h2><blockquote>
+<p> 请你针对这篇文章的baseline和数据集分别进行描述，以markdown格式的代码列两张表，其中对数据集的描述，表的title为数据集名称 | 边信息描述 | 数据集描述；对beseline的描述title为baseline名称（如Bert+GIN）| 方法描述  </p>
+</blockquote>
+<h3 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h3><table>
+<thead>
+<tr>
+<th>数据集名称</th>
+<th>边信息描述</th>
+<th>数据集描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Amazon-Movie</td>
+<td>用户与电影之间的交互，边文本为用户的评论</td>
+<td>用户与电影之间的互动网络，包含1,697,533条边和173,986个节点，边文本为电影评论。</td>
+</tr>
+<tr>
+<td>Amazon-Apps</td>
+<td>用户与应用之间的交互，边文本为用户的评论</td>
+<td>用户与应用之间的互动网络，包含752,937条边和100,468个节点，边文本为应用评论。</td>
+</tr>
+<tr>
+<td>Goodreads-Crime</td>
+<td>用户与图书之间的交互，边文本为用户的评论</td>
+<td>用户与图书之间的互动网络，包含1,849,236条边和385,203个节点，边文本为关于犯罪类图书的评论。</td>
+</tr>
+<tr>
+<td>Goodreads-Children</td>
+<td>用户与图书之间的交互，边文本为用户的评论</td>
+<td>用户与图书之间的互动网络，包含734,640条边和192,036个节点，边文本为关于儿童类图书的评论。</td>
+</tr>
+<tr>
+<td>StackOverflow</td>
+<td>专家与问题之间的交互，边文本为专家的回答</td>
+<td>专家与问题之间的互动网络，包含281,657条边和129,322个节点，边文本为专家对问题的回答。</td>
+</tr>
+</tbody></table>
+<h3 id="Baseline"><a href="#Baseline" class="headerlink" title="Baseline"></a>Baseline</h3><table>
+<thead>
+<tr>
+<th>Baseline名称</th>
+<th>方法描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TF-IDF</td>
+<td>基于词袋模型的特征提取方法，用于将边的文本信息转换为向量表示，并进行分类。</td>
+</tr>
+<tr>
+<td>TF-IDF+nodes</td>
+<td>在TF-IDF的基础上，结合了节点嵌入信息，增强了文本特征与节点信息的融合。</td>
+</tr>
+<tr>
+<td>BERT</td>
+<td>使用预训练语言模型BERT对边的文本信息进行编码，并结合网络结构进行分类。</td>
+</tr>
+<tr>
+<td>BERT+nodes</td>
+<td>在BERT模型中加入节点信息，将节点嵌入附加到输入的文本序列中，改善了文本表示。</td>
+</tr>
+<tr>
+<td>MeanSAGE</td>
+<td>基于图神经网络SAGE（GraphSAGE），采用节点平均聚合机制，使用边的文本信息进行节点嵌入更新。</td>
+</tr>
+<tr>
+<td>MaxSAGE</td>
+<td>基于图神经网络SAGE（GraphSAGE），采用节点最大池化聚合机制，结合边文本进行节点表示学习。</td>
+</tr>
+<tr>
+<td>GIN</td>
+<td>基于图神经网络GIN（Graph Isomorphism Network），通过聚合邻居节点信息来学习节点表示，同时考虑边文本信息。</td>
+</tr>
+<tr>
+<td>CensNet</td>
+<td>通过边-节点切换机制更新节点和边的表示，利用边文本信息学习更好的表示。</td>
+</tr>
+<tr>
+<td>NENN</td>
+<td>结合节点和边邻居信息进行图卷积，使用边的文本信息来改进节点表示。</td>
+</tr>
+<tr>
+<td>GraphFormers</td>
+<td>将图神经网络与预训练语言模型（PLM）嵌套结合，用于同时编码文本和网络信号，以提升表示学习效果。</td>
+</tr>
+<tr>
+<td>BERT+MaxSAGE</td>
+<td>将BERT与MaxSAGE结合，使用MaxSAGE聚合机制对节点表示进行学习，同时考虑边文本信息。</td>
+</tr>
+<tr>
+<td>BERT+MeanSAGE</td>
+<td>将BERT与MeanSAGE结合，采用平均聚合机制来更新节点表示，并结合边文本信息。</td>
+</tr>
+<tr>
+<td>BERT+GIN</td>
+<td>将BERT与GIN结合，使用GIN的聚合机制来学习节点表示，同时考虑边文本信息。</td>
+</tr>
+<tr>
+<td>BERT+CensNet</td>
+<td>将BERT与CensNet结合，通过边-节点切换机制更新节点和边的表示。</td>
+</tr>
+<tr>
+<td>BERT+NENN</td>
+<td>将BERT与NENN结合，使用边文本信息和节点-边邻居信息进行图卷积，增强节点表示的学习。</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Prompt</p>
+<p>请你从边分类和链接预测两个角度来总结这篇文章的实验部分，具体来说，总结损失函数的设计、评价指标并对实验结果进行简要分析，其中损失函数请给出在 powerpoint 中直接粘贴的格式</p>
+</blockquote>
+<h3 id="边分类"><a href="#边分类" class="headerlink" title="边分类"></a>边分类</h3><h4 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h4><h4 id="评价指标"><a href="#评价指标" class="headerlink" title="评价指标"></a>评价指标</h4><h4 id="实验结果分析"><a href="#实验结果分析" class="headerlink" title="实验结果分析"></a>实验结果分析</h4><h3 id="链接预测"><a href="#链接预测" class="headerlink" title="链接预测"></a>链接预测</h3><h4 id="损失函数-1"><a href="#损失函数-1" class="headerlink" title="损失函数"></a>损失函数</h4><h4 id="评价指标-1"><a href="#评价指标-1" class="headerlink" title="评价指标"></a>评价指标</h4><h4 id="实验结果分析-1"><a href="#实验结果分析-1" class="headerlink" title="实验结果分析"></a>实验结果分析</h4><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2><blockquote>
+<p>我现在需要对这篇论文生成我的 conclusion，下面这段内容是我的感想，请你对下面这段文字进行精简，在保证我的思路和想法的同时，尽可能的浓缩这段内容</p>
+</blockquote>
+<p>这篇文章的总体思路比较清晰，传统的 GNNs 方法偏向于对节点信息进行聚合处理，通常来说在图卷积之后，得到的结果是节点的嵌入，再对节点嵌入进行后续处理如连接等来得到边的嵌入。</p>
+<p>但是对于富文本图来说，边属性是非结构化化的自然语言形式的复杂结构，无法通过简单的词袋模型、one-hot 编码来对边属性进行有效的处理，而预训练模型（PLM）如 Bert 等对于自然语言文本的处理具备较好的基础，因此使用 PLM 处理边文本信息之后，再对 PLM 嵌入后的边属性进一步处理就是自然而然的思路了。</p>
+<p>然而已有工作并没有将这一工作深入进去，通常是以级联等粗浅的方式处理嵌入后的边属性，只是将嵌入后的属性作为一个边的特征来辅助节点聚合，并未深入的融合网络结构信息。</p>
+<p>本文提出的方法在得到 PLM 嵌入的文本初表示之后，将其与边对应的节点信息通过 Transformer 架构深度融合，在 Transformer 每一层结束之后，将节点结构信息和边文本信息融合输入到下一层网络，这样每一层都可以同时考虑节点结构信息和文本编码信息，实现深层次融合，最终得到边表示。</p>
+<p>此外，本文提出另外一种方式来更加有效的结合网络结构信息，即将目标节点在上一模块中计算出的所有边表示输入到多头注意力模块中，以期望输出的边表示能够更有效的结合其他边的信息，考虑到了目标节点的结构特征。</p>
+<p>对于节点表示，本文遵循 GAT 的方法，通过结合边表示和对应的节点来计算边权重（通过线性变换得到），将目标节点的所有边加权聚合得到节点嵌入。</p>
+<p>对于本文的观点：将边对应的节点信息和边属性一同输入到 Transformer 中深度融合，并结合了目标节点的局部结构特征，可以有效的完成网络结构信息和 PLM 的深度融合。在直觉上是合理的，但我认为其主要融合的点在于融合子结构信息，而非将节点表示通过 Transformer 融合到文本表示中，但本文的大量工作都在于此，并且后续结合目标节点的结构信息，通过消融实验表明，并不能很明显的改进实验的效果，仅在 1&#x2F;5 的数据集上优于其他消融实验。</p>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E8%AE%BA%E6%96%87%E7%AC%94%E8%AE%B0/" class="category-chain-item">论文笔记</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="print-no-link">#图神经网络</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>EDGEFORMERS: GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS</div>
+      <div>https://zy-pioneer.github.io/2024/12/09/EDGEFORMERS_ GRAPH-EMPOWERED TRANSFORMERS FOR REPRESENTATION LEARNING ON TEXTUALEDGE NETWORKS/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>coisini</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2024年12月9日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2024/12/14/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%A8%A1%E5%9E%8B%E5%AE%89%E5%85%A8/" title="人工智能模型安全">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">人工智能模型安全</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2024/11/20/PROVNINJA%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/" title="PROVNINJA论文阅读">
+                        <span class="hidden-mobile">PROVNINJA论文阅读</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/zy-Pioneer" target="_blank" rel="nofollow noopener"><span>Coisini</span></a> <i class="iconfont icon-love"></i> <span>zmx</span> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>

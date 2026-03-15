@@ -1,0 +1,751 @@
+
+
+<!DOCTYPE html>
+<html lang="zh-CN" data-default-color-scheme=dark>
+
+
+
+<head>
+  <meta charset="UTF-8">
+
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/fluid.png">
+  <link rel="icon" href="/img/fluid.png">
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="author" content="coisini">
+  <meta name="keywords" content="生活,论文,笔记,技术">
+  
+    <meta name="description" content="从 Sysmon、Windows Security、PowerShell Operational 与 TaskScheduler Operational 四类数据源出发，梳理 Windows 主机检测中的身份、行为、脚本语义与持久化观测面。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows主机入侵检测中的四类关键数据源">
+<meta property="og:url" content="https://zy-pioneer.github.io/2026/03/15/Windows%E4%B8%BB%E6%9C%BA%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E4%B8%AD%E7%9A%84%E5%9B%9B%E7%B1%BB%E5%85%B3%E9%94%AE%E6%95%B0%E6%8D%AE%E6%BA%90/index.html">
+<meta property="og:site_name" content="Coisini&#39;s Blog">
+<meta property="og:description" content="从 Sysmon、Windows Security、PowerShell Operational 与 TaskScheduler Operational 四类数据源出发，梳理 Windows 主机检测中的身份、行为、脚本语义与持久化观测面。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-03-15T12:30:00.000Z">
+<meta property="article:modified_time" content="2026-03-15T12:30:00.000Z">
+<meta property="article:author" content="coisini">
+<meta property="article:tag" content="安全">
+<meta property="article:tag" content="入侵检测">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary_large_image">
+  
+  
+  
+  <title>Windows主机入侵检测中的四类关键数据源 - Coisini&#39;s Blog</title>
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
+
+
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/github-markdown-css/4.0.0/github-markdown.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/hint.css/2.7.0/hint.min.css" />
+
+  <link  rel="stylesheet" href="https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.css" />
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+<!-- Do not modify the link that theme dependent icons -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1749284_5i9bdhy70f8.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/c/font_1736178_k526ubmyhba.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+
+  <link id="highlight-css" rel="stylesheet" href="/css/highlight.css" />
+  
+    <link id="highlight-css-dark" rel="stylesheet" href="/css/highlight-dark.css" />
+  
+
+
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    Fluid.ctx = Object.assign({}, Fluid.ctx)
+    var CONFIG = {"hostname":"zy-pioneer.github.io","root":"/","version":"1.9.8","typing":{"enable":true,"typeSpeed":70,"cursorChar":"_","loop":false,"scope":[]},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"left","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"code_language":{"enable":true,"default":"TEXT"},"copy_btn":true,"image_caption":{"enable":true},"image_zoom":{"enable":true,"img_url_replace":["",""]},"toc":{"enable":true,"placement":"right","headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":true,"follow_dnt":true,"baidu":null,"google":{"measurement_id":null},"tencent":{"sid":null,"cid":null},"leancloud":{"app_id":null,"app_key":null,"server_url":null,"path":"window.location.pathname","ignore_local":false},"umami":{"src":null,"website_id":null,"domains":null,"start_time":"2024-01-01T00:00:00.000Z","token":null,"api_server":null}},"search_path":"/local-search.xml","include_content_in_search":true};
+
+    if (CONFIG.web_analytics.follow_dnt) {
+      var dntVal = navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack;
+      Fluid.ctx.dnt = dntVal && (dntVal.startsWith('1') || dntVal.startsWith('yes') || dntVal.startsWith('on'));
+    }
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+
+  
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+  
+
+  <header>
+    
+
+<div class="header-inner" style="height: 70vh;">
+  <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <strong>Coisini</strong>
+    </a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/" target="_self">
+                <i class="iconfont icon-home-fill"></i>
+                <span>首页</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/" target="_self">
+                <i class="iconfont icon-archive-fill"></i>
+                <span>归档</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/" target="_self">
+                <i class="iconfont icon-category-fill"></i>
+                <span>分类</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/" target="_self">
+                <i class="iconfont icon-tags-fill"></i>
+                <span>标签</span>
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/" target="_self">
+                <i class="iconfont icon-user-fill"></i>
+                <span>关于</span>
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" target="_self" href="javascript:;" data-toggle="modal" data-target="#modalSearch" aria-label="Search">
+              <i class="iconfont icon-search"></i>
+            </a>
+          </li>
+          
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" target="_self" href="javascript:;" aria-label="Color Toggle">
+              <i class="iconfont icon-dark" id="color-toggle-icon"></i>
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+  
+
+<div id="banner" class="banner" parallax=true
+     style="background: url('/img/default.png') no-repeat center center; background-size: cover;">
+  <div class="full-bg-img">
+    <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+      <div class="banner-text text-center fade-in-up">
+        <div class="h2">
+          
+            <span id="subtitle" data-typed-text="Windows主机入侵检测中的四类关键数据源"></span>
+          
+        </div>
+
+        
+          
+  <div class="mt-3">
+    
+    
+      <span class="post-meta">
+        <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+        <time datetime="2026-03-15 20:30" pubdate>
+          2026年3月15日 晚上
+        </time>
+      </span>
+    
+  </div>
+
+  <div class="mt-1">
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-chart"></i>
+        
+          4.3k 字
+        
+      </span>
+    
+
+    
+      <span class="post-meta mr-2">
+        <i class="iconfont icon-clock-fill"></i>
+        
+        
+        
+          36 分钟
+        
+      </span>
+    
+
+    
+    
+  </div>
+
+
+        
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+</div>
+
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+
+    </div>
+
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div id="board">
+          <article class="post-content mx-auto">
+            <h1 id="seo-header">Windows主机入侵检测中的四类关键数据源</h1>
+            
+            
+              <div class="markdown-body">
+                
+                <p>在 Windows 主机检测里，真正决定分析上限的，通常不是规则，而是数据源。</p>
+<p>这句话听起来有点老生常谈，但在实际工作里，它经常被反过来理解。大家更容易先去讨论规则、IOC、Sigma、EDR 查询语句，或者某个事件号是否“高价值”。可问题是，规则只是对数据的解释方式；如果底层数据源本身不完整，那么再漂亮的规则也只能解释一部分事实。</p>
+<p>从这个角度看，<code>Sysmon</code>、<code>Windows Security</code>、<code>PowerShell Operational</code>、<code>TaskScheduler Operational</code> 之所以值得被放在一起讨论，不是因为它们恰好都属于 Windows 日志，而是因为它们分别覆盖了四种不同的观测面：认证与审计、行为遥测、脚本执行语义、调度与持久化上下文。它们并不描述同一层事实，因此也不存在简单替代关系。很多真正有分析价值的结论，都建立在这些数据源的交叉关联之上。</p>
+<h2 id="Windows-主机检测中的四类核心观测面"><a href="#Windows-主机检测中的四类核心观测面" class="headerlink" title="Windows 主机检测中的四类核心观测面"></a>Windows 主机检测中的四类核心观测面</h2><p>如果把 Windows 主机检测抽象成几个最基础的问题，那么分析工作基本都绕不开下面四件事：</p>
+<ul>
+<li>谁进入了系统；</li>
+<li>进入之后做了什么；</li>
+<li>哪些动作是通过脚本或自动化完成的；</li>
+<li>是否建立了持续触发或反复执行的机制。</li>
+</ul>
+<p>这四个问题，刚好对应四类不同的数据源。</p>
+<p><code>Windows Security</code> 负责认证和审计语义。它定义的是身份、登录、会话、权限这一层背景。<br><code>Sysmon</code> 负责更高分辨率的行为遥测。它把进程、网络、文件、注册表等动作组织成可关联的证据。<br><code>PowerShell Operational</code> 负责脚本层的执行语义。它提供的不是“PowerShell 存在”这一事实，而是尽可能接近“PowerShell 实际做了什么”。<br><code>TaskScheduler Operational</code> 则负责调度与持久化上下文。它解释的是，某些动作为什么会在登录、启动或定时条件下重复出现。</p>
+<p>因此，讨论这四类日志，本质上不是在列一个“Windows 常见日志清单”，而是在讨论 Windows 主机检测里的可观测性边界。</p>
+<h2 id="Sysmon：行为级遥测为什么能补足原生日志缺口"><a href="#Sysmon：行为级遥测为什么能补足原生日志缺口" class="headerlink" title="Sysmon：行为级遥测为什么能补足原生日志缺口"></a>Sysmon：行为级遥测为什么能补足原生日志缺口</h2><p>微软在 Sysmon 文档里对它的定位非常明确：它提供的是细粒度的底层遥测，而不是直接的安全结论。文档特别提到，Sysmon 事件的价值是“observational, not interpretive”，并且这些事件是可以组合起来分析的。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/sysmon/sysmon-events">Sysmon 官方文档</a></p>
+<p>这恰好说明了 Sysmon 在检测中的真实位置。它不是在告诉分析者“这就是攻击”，而是在尽可能完整地保留主机行为轨迹。相比原生 Security 日志，Sysmon 的优势不在“日志更多”这么简单，而在于行为上下文更完整、关联粒度更高。</p>
+<p>以最常见的几类事件为例：</p>
+<ul>
+<li><code>Event ID 1</code> 记录进程创建，包含命令行、父进程、哈希、<code>Process GUID</code> 等关键信息；</li>
+<li><code>Event ID 3</code> 记录网络连接；</li>
+<li><code>Event ID 11</code> 记录文件创建或覆盖；</li>
+<li><code>Event ID 12-14</code> 覆盖注册表对象创建、修改、重命名等行为。</li>
+</ul>
+<p>这些事件单独看并不总是显得“危险”。它们真正的价值在于串起来以后，能让行为链具备解释力。</p>
+<p>一个很典型的例子，是 Office 文档诱导执行链。表面上看，用户只是打开了一个文档；如果只看粗粒度日志，分析者可能只会注意到系统里出现了一次 <code>powershell.exe</code>。但在 Sysmon 里，这条链可以被展开：<code>winword.exe</code> 拉起 <code>powershell.exe</code>，后者发起网络连接，随后又在 <code>%TEMP%</code> 目录落地文件。如果这个进程之后还修改了注册表自启动项，那么对应的注册表事件也会继续补上后半段上下文。</p>
+<p>这类链式可见性，正是 Sysmon 的核心价值。它让“有个可疑进程”变成“这个进程从哪里来、做了什么、留下了什么”，而这恰好是主机检测最需要的能力。</p>
+<p>当然，Sysmon 的边界也很明确。它依赖配置质量，不同环境里配置差异会直接影响数据完整度。微软文档也提到，部分事件默认并不开启，比如网络连接事件默认关闭，因为它们会带来显著的数据量增长。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/sysmon/sysmon-events">Sysmon 官方文档</a> 这意味着 Sysmon 不是“装了就行”，而是一层需要工程化运营的遥测体系。</p>
+<blockquote>
+<p>配图建议：可以在这里放一张 <code>Microsoft-Windows-Sysmon/Operational</code> 的 Event Viewer 截图，帮助读者把“行为遥测”与具体日志位置对应起来。<br>参考来源：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon">https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon</a></p>
+</blockquote>
+<h2 id="Windows-Security：为什么它仍然是主机检测的基线数据源"><a href="#Windows-Security：为什么它仍然是主机检测的基线数据源" class="headerlink" title="Windows Security：为什么它仍然是主机检测的基线数据源"></a>Windows Security：为什么它仍然是主机检测的基线数据源</h2><p>如果说 Sysmon 更像行为扩展层，那么 <code>Windows Security</code> 更像主机检测的审计基线。它的价值不是体现在行为颗粒度，而是体现在身份、会话与审计语义。</p>
+<p>微软对 <code>4624</code>、<code>4625</code>、<code>4688</code> 的定义非常经典：<br><code>4624</code> 表示成功登录，生成于创建登录会话的目标主机上；<br><code>4625</code> 表示登录失败，会记录失败账户、登录类型、来源主机、来源 IP 等信息；<br><code>4688</code> 表示新进程被创建。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624">4624 官方文档</a> <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625">4625 官方文档</a> <a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688">4688 官方文档</a></p>
+<p>如果只是把这些事件当成“事件号知识点”，它们的价值会被严重低估。真正重要的是，这些日志定义了行为的主体。</p>
+<p>举一个非常典型的场景：某台服务器上，短时间内连续出现多次 <code>4625</code>，来源 IP 相同，用户名相同；随后，这个账号对应一次 <code>4624</code> 登录成功，而且登录类型显示为远程交互式登录。紧接着，在同一时段内，系统里出现了 <code>4688</code> 记录的新进程，比如 <code>cmd.exe</code>、<code>powershell.exe</code>，甚至某些管理工具或 <code>LOLBin</code>。</p>
+<p>如果脱离登录上下文，只看后面的进程创建，分析者只能说“这里有一组可疑行为”；但一旦把它放回认证链路中理解，性质就完全不同了。此时问题不再只是“某个进程被创建”，而是“某个异常登录会话在成功进入系统后启动了这些进程”。这就是 Security 日志不可替代的地方。</p>
+<p>它的边界同样非常清楚。<code>Windows Security</code> 更像一套系统级审计账本，它告诉分析者“谁做了什么”，但未必能把“怎么做的”讲得足够细。以 <code>4688</code> 为例，微软文档说明命令行字段是在较新版本中加入的，并且是否完整记录还受到审计策略影响。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688">4688 官方文档</a> 也就是说，Security 日志适合作为分析的身份底座，却不适合作为行为取证的全部。</p>
+<blockquote>
+<p>配图建议：如果想增强可读性，可以插入微软 <code>4688</code> 文档中的事件结构图，重点标注 <code>Creator Process Name</code>、<code>New Process Name</code>、<code>Token Elevation Type</code> 等字段。<br>参考来源：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688</a></p>
+</blockquote>
+<h2 id="PowerShell-Operational：从“看见-PowerShell”到“理解执行语义”"><a href="#PowerShell-Operational：从“看见-PowerShell”到“理解执行语义”" class="headerlink" title="PowerShell Operational：从“看见 PowerShell”到“理解执行语义”"></a>PowerShell Operational：从“看见 PowerShell”到“理解执行语义”</h2><p>在很多 Windows 入侵场景里，<code>powershell.exe</code> 的存在并不罕见。真正有分析价值的问题从来不是“有没有 PowerShell”，而是“PowerShell 到底执行了什么”。</p>
+<p>这正是 <code>PowerShell Operational</code> 的意义。</p>
+<p>微软关于脚本块日志的策略文档写得很直接：启用 <code>TurnOnPowerShellScriptBlockLogging</code> 后，Windows PowerShell 会把命令、脚本块、函数和脚本的处理过程记录到 <code>Microsoft-Windows-PowerShell/Operational</code> 日志中。如果再启用 Invocation Logging，还会记录命令和脚本块的开始、结束调用，但代价是日志量明显增长。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-windowspowershell">微软策略文档</a></p>
+<p>在事件层面，微软的故障排查文档进一步给出了常见的两个关键事件：<br><code>4103</code> 对应模块日志，包含 cmdlet 名称和执行输出；<br><code>4104</code> 对应脚本块日志，事件中包含脚本内容，超长脚本会被拆成多个事件。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-machines/windows/debug-customscriptextension-runcommand-scripts">微软文档</a></p>
+<p>这组日志改变的不是数量，而是语义层级。</p>
+<p>仅靠进程创建日志，分析者通常只能知道某个时刻启动了 <code>powershell.exe</code>，有时命令行里还能看到一个编码参数，或者一小段下载执行片段。但到了 <code>4104</code> 这一层，日志开始暴露脚本块本身：例如 <code>Invoke-WebRequest</code>、<code>IEX</code>、Base64 解码、字符串拼接、内存执行片段，甚至部分还原后的脚本内容。这时分析工作从“看见解释器”推进到了“理解解释器承载的执行意图”。</p>
+<p>一个典型的例子是下载执行型 PowerShell 脚本。进程侧可能只会留下一个 <code>powershell.exe -enc ...</code>；如果同时具备脚本块日志，分析者则更有机会看到下载地址、输出路径、解码逻辑，甚至能看出脚本是在投递载荷、做主机侦察，还是进行横向移动准备。信息密度的差异是非常明显的。</p>
+<p>这也是为什么 <code>PowerShell Operational</code> 在很多主机检测场景中具有不可替代性。它不是简单给 Sysmon 或 Security 做补充，而是在脚本语义层打开了另一扇窗口。没有这层语义，很多脚本型攻击只能停留在“可疑进程”层面；有了这层语义，分析者才真正有机会判断脚本的意图、复杂度与后续风险。</p>
+<p>不过，它的边界也同样存在。首先，它依赖日志策略开启情况；其次，日志量和敏感内容保护本身就是成本问题；最后，它仍然不能替代进程、网络和持久化侧证据。<code>PowerShell Operational</code> 解决的是“脚本做了什么”，但无法单独回答“是谁拉起了它、它是否建立了后续机制、它是否产生了真实落地行为”。</p>
+<blockquote>
+<p>配图建议：这一节不一定要放截图，更适合插入一段脱敏后的 <code>4104 ScriptBlockText</code> 示例。对读者来说，一段真实结构的脚本块文本往往比截图更有信息密度。<br>参考来源：<a target="_blank" rel="noopener" href="https://psmths.gitbook.io/windows-forensics/artifacts-by-type/event-log-artifacts/microsoft-windows-powershell/evtx-4104-script-block-logging">https://psmths.gitbook.io/windows-forensics/artifacts-by-type/event-log-artifacts/microsoft-windows-powershell/evtx-4104-script-block-logging</a></p>
+</blockquote>
+<h2 id="TaskScheduler-Operational：为什么计划任务是持久化分析里的关键侧面"><a href="#TaskScheduler-Operational：为什么计划任务是持久化分析里的关键侧面" class="headerlink" title="TaskScheduler Operational：为什么计划任务是持久化分析里的关键侧面"></a>TaskScheduler Operational：为什么计划任务是持久化分析里的关键侧面</h2><p>相比前面三类日志，<code>TaskScheduler Operational</code> 更容易被忽视。它不像 Security 那样“经典”，也不像 Sysmon 那样“显眼”，但如果把视角转向持久化与自动执行机制，它的重要性会立刻上升。</p>
+<p>微软在 Task Scheduler 的故障排查文档里指出，任务的 <code>History</code> 视图能够帮助确认任务是否被触发、是否执行完成，以及执行过程中是否报错；对应的日志位置则是 <code>Applications and Services Logs &gt; Microsoft &gt; Windows &gt; TaskScheduler &gt; Operational</code>。<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/troubleshoot-scheduled-tasks-not-running">微软文档</a></p>
+<p>从运维视角看，这只是系统任务的执行历史；从安全视角看，它暴露的是自动执行机制本身的生命周期。</p>
+<p>计划任务之所以值得被单独观察，不是因为攻击者“也会用它”，而是因为它天然适合把一次性行为转化成持续性执行。按时间触发、按登录触发、按系统启动触发，这些能力对于合法运维和恶意持久化都同样好用。换句话说，计划任务不是简单的 Windows 功能项，它是一种非常稳定的执行框架。</p>
+<p>一个典型场景是这样的：攻击者在系统里投递了某个载荷，但没有让它长期驻留在内存中，而是通过 <code>schtasks</code> 创建一个在用户登录后自动执行的计划任务。结果是，恶意程序本身可能不会一直存在，但每次用户登录，它都会再次被拉起。如果分析者只盯着进程侧数据，只能看到这个程序“为什么总在特定时机出现”；而一旦把 <code>TaskScheduler Operational</code> 纳入分析，就能看到它背后的调度机制。</p>
+<p>这类日志的价值，恰恰就在于它把“反复出现的行为”解释成“存在持续触发条件的机制”。很多时候，持久化分析最难的不是发现某个进程，而是解释它为什么稳定复现；<code>TaskScheduler Operational</code> 就是在补这个上下文。</p>
+<p>它的边界也比较清晰。它更偏向机制侧，而不是完整行为侧。它可以告诉分析者某个任务是否注册、触发、失败、完成，但通常不负责提供脚本内容、网络行为或认证背景。因此，它天然适合作为持久化分析中的一块拼图，而不是单独输出完整结论的依据。</p>
+<blockquote>
+<p>配图建议：可以在这里放一张 Task Scheduler <code>History</code> 或 <code>Operational</code> 事件视图截图，帮助读者直观看到任务注册、触发和运行失败等记录。<br>参考来源：<a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/troubleshoot-scheduled-tasks-not-running">https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/troubleshoot-scheduled-tasks-not-running</a></p>
+</blockquote>
+<h2 id="四类数据源的互补关系：如何从单点事件走到攻击链重建"><a href="#四类数据源的互补关系：如何从单点事件走到攻击链重建" class="headerlink" title="四类数据源的互补关系：如何从单点事件走到攻击链重建"></a>四类数据源的互补关系：如何从单点事件走到攻击链重建</h2><p>真正成熟的主机检测，从来不是围绕某条“高价值事件”展开，而是围绕关联展开。单一数据源通常只能回答局部问题，而攻击分析真正关心的是：这些局部问题能否被拼成一条可信的攻击链。</p>
+<p>一个很典型的复合场景是：某台服务器上先出现异常登录活动，随后进入系统的账户启动了 PowerShell，PowerShell 下载并执行了一段脚本，之后系统中新建了一个计划任务，接着在后续时间点又不断派生出新的进程与网络连接。</p>
+<p>如果只看 <code>Windows Security</code>，分析者能知道存在失败登录、成功登录，以及登录后某个会话里创建了新进程，但对这些进程究竟做了什么，了解仍然有限。<br>如果只看 <code>Sysmon</code>，分析者能看到进程树、外联、文件落地与注册表动作，却未必知道这组行为属于哪个认证会话。<br>如果只看 <code>PowerShell Operational</code>，分析者能理解脚本块内容和执行语义，却不一定清楚是谁拉起了脚本，也不一定知道脚本执行后是否建立了后续机制。<br>如果只看 <code>TaskScheduler Operational</code>，分析者可以解释自动执行为什么存在，但仍然缺少前面的身份语境、脚本细节和完整行为链。</p>
+<p>而一旦把四类数据源放到同一时间线上，分析结构就会完全不同：</p>
+<ul>
+<li><code>Windows Security</code> 给出主体和会话；</li>
+<li><code>Sysmon</code> 给出行为对象和链路细节；</li>
+<li><code>PowerShell Operational</code> 给出脚本层语义；</li>
+<li><code>TaskScheduler Operational</code> 给出持续执行的机制解释。</li>
+</ul>
+<p>这时分析者看到的，就不再是几个彼此独立的可疑点，而是一条具备时间连续性、主体一致性和行为闭环的攻击链。对主机检测来说，这种跨源关联才是真正接近事实的分析方式。</p>
+<p>很多误区也恰恰出在这里。过度关注某个“高价值事件号”，往往会让分析停留在信号层；而真正有价值的判断，通常来自不同数据源围绕同一主体、同一时间窗口、同一执行链形成的证据闭环。</p>
+<h2 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h2><p><code>Sysmon</code>、<code>Windows Security</code>、<code>PowerShell Operational</code>、<code>TaskScheduler Operational</code> 的价值，不在于它们都是 Windows 世界里的“常见日志”，而在于它们共同构成了主机检测中四个关键观测面：身份、行为、脚本语义、自动执行机制。</p>
+<p>如果把 Windows 主机检测理解成对攻击链的重建过程，那么 <code>Windows Security</code> 负责定义“谁进入了系统”，<code>Sysmon</code> 负责定义“进入之后发生了哪些行为”，<code>PowerShell Operational</code> 负责定义“脚本层到底执行了什么”，而 <code>TaskScheduler Operational</code> 负责定义“这些动作是否被转化成了持续性执行机制”。这四类数据源当然不能覆盖主机上的全部真相，但已经足以构成一个稳定且实用的分析框架。</p>
+<p>从这个意义上说，Windows 主机检测的起点并不是规则，而是对数据源能力边界的理解。规则建立在日志之上，而高质量的分析建立在正确的数据观之上。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>Sysmon events | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/security/operating-system-security/sysmon/sysmon-events">https://learn.microsoft.com/en-us/windows/security/operating-system-security/sysmon/sysmon-events</a></li>
+<li>Sysmon | Sysinternals<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon">https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon</a></li>
+<li>4624(S): An account was successfully logged on | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4624</a></li>
+<li>4625(F): An account failed to log on | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4625</a></li>
+<li>4688(S): A new process has been created | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688">https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-10/security/threat-protection/auditing/event-4688</a></li>
+<li>Policy CSP - WindowsPowerShell | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-windowspowershell">https://learn.microsoft.com/en-us/windows/client-management/mdm/policy-csp-windowspowershell</a></li>
+<li>Debug PowerShell scripts run by Custom Script Extension or Run Command | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-machines/windows/debug-customscriptextension-runcommand-scripts">https://learn.microsoft.com/en-us/troubleshoot/azure/virtual-machines/windows/debug-customscriptextension-runcommand-scripts</a></li>
+<li>Troubleshoot issues with scheduled tasks not running | Microsoft Learn<br><a target="_blank" rel="noopener" href="https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/troubleshoot-scheduled-tasks-not-running">https://learn.microsoft.com/en-us/troubleshoot/windows-server/system-management-components/troubleshoot-scheduled-tasks-not-running</a></li>
+<li>EVTX 4104 Script Block Logging | Windows Forensics<br><a target="_blank" rel="noopener" href="https://psmths.gitbook.io/windows-forensics/artifacts-by-type/event-log-artifacts/microsoft-windows-powershell/evtx-4104-script-block-logging">https://psmths.gitbook.io/windows-forensics/artifacts-by-type/event-log-artifacts/microsoft-windows-powershell/evtx-4104-script-block-logging</a></li>
+</ul>
+
+                
+              </div>
+            
+            <hr/>
+            <div>
+              <div class="post-metas my-3">
+  
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/" class="category-chain-item">技术分享</a>
+  
+  
+    <span>></span>
+    
+  <a href="/categories/%E6%8A%80%E6%9C%AF%E5%88%86%E4%BA%AB/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B/" class="category-chain-item">入侵检测</a>
+  
+  
+
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/%E5%AE%89%E5%85%A8/" class="print-no-link">#安全</a>
+      
+        <a href="/tags/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B/" class="print-no-link">#入侵检测</a>
+      
+        <a href="/tags/Windows/" class="print-no-link">#Windows</a>
+      
+    </div>
+  
+</div>
+
+
+              
+  
+
+  <div class="license-box my-3">
+    <div class="license-title">
+      <div>Windows主机入侵检测中的四类关键数据源</div>
+      <div>https://zy-pioneer.github.io/2026/03/15/Windows主机入侵检测中的四类关键数据源/</div>
+    </div>
+    <div class="license-meta">
+      
+        <div class="license-meta-item">
+          <div>作者</div>
+          <div>coisini</div>
+        </div>
+      
+      
+        <div class="license-meta-item license-meta-date">
+          <div>发布于</div>
+          <div>2026年3月15日</div>
+        </div>
+      
+      
+      
+        <div class="license-meta-item">
+          <div>许可协议</div>
+          <div>
+            
+              
+              
+                <a class="print-no-link" target="_blank" href="https://creativecommons.org/licenses/by/4.0/">
+                  <span class="hint--top hint--rounded" aria-label="BY - 署名">
+                    <i class="iconfont icon-cc-by"></i>
+                  </span>
+                </a>
+              
+            
+          </div>
+        </div>
+      
+    </div>
+    <div class="license-icon iconfont"></div>
+  </div>
+
+
+
+              
+                <div class="post-prevnext my-3">
+                  <article class="post-prev col-6">
+                    
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2026/03/07/Hexo%E5%8D%9A%E5%AE%A2%E6%97%A5%E5%B8%B8%E5%86%99%E4%BD%9C%E4%B8%8E%E5%8F%91%E5%B8%83%E5%AE%9E%E6%88%98%E6%8C%87%E5%8D%97/" title="Hexo博客日常写作与发布实战指南">
+                        <span class="hidden-mobile">Hexo博客日常写作与发布实战指南</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="side-col d-none d-lg-block col-lg-2">
+      
+  <aside class="sidebar" style="margin-left: -1rem">
+    <div id="toc">
+  <p class="toc-header">
+    <i class="iconfont icon-list"></i>
+    <span>目录</span>
+  </p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+
+
+  </aside>
+
+
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+  
+
+
+
+
+
+
+
+    
+
+    
+      <a id="scroll-top-button" aria-label="TOP" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">搜索</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v" for="local-search-input">关键词</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+  
+    <div class="footer-content">
+       <a href="https://github.com/zy-Pioneer" target="_blank" rel="nofollow noopener"><span>Coisini</span></a> <i class="iconfont icon-love"></i> <span>zmx</span> 
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+
+  <!-- Scripts -->
+  
+  <script  src="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://lib.baomitu.com/nprogress/0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://lib.baomitu.com/jquery/3.6.4/jquery.min.js" ></script>
+<script  src="https://lib.baomitu.com/twitter-bootstrap/4.6.1/js/bootstrap.min.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+
+  <script  src="https://lib.baomitu.com/typed.js/2.0.12/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var subtitle = document.getElementById('subtitle');
+      if (!subtitle || !typing) {
+        return;
+      }
+      var text = subtitle.getAttribute('data-typed-text');
+      
+        typing(text);
+      
+    })(window, document);
+  </script>
+
+
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/tocbot/4.20.1/tocbot.min.js', function() {
+    var toc = jQuery('#toc');
+    if (toc.length === 0 || !window.tocbot) { return; }
+    var boardCtn = jQuery('#board-ctn');
+    var boardTop = boardCtn.offset().top;
+
+    window.tocbot.init(Object.assign({
+      tocSelector     : '#toc-body',
+      contentSelector : '.markdown-body',
+      linkClass       : 'tocbot-link',
+      activeLinkClass : 'tocbot-active-link',
+      listClass       : 'tocbot-list',
+      isCollapsedClass: 'tocbot-is-collapsed',
+      collapsibleClass: 'tocbot-is-collapsible',
+      scrollSmooth    : true,
+      includeTitleTags: true,
+      headingsOffset  : -boardTop,
+    }, CONFIG.toc));
+    if (toc.find('.toc-list-item').length > 0) {
+      toc.css('visibility', 'visible');
+    }
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('tocbot' in window) {
+        tocbot.refresh();
+        var toc = jQuery('#toc');
+        if (toc.length === 0 || !tocbot) {
+          return;
+        }
+        if (toc.find('.toc-list-item').length > 0) {
+          toc.css('visibility', 'visible');
+        }
+      }
+    });
+  });
+</script>
+
+
+  <script src=https://lib.baomitu.com/clipboard.js/2.0.11/clipboard.min.js></script>
+
+  <script>Fluid.plugins.codeWidget();</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/anchor-js/5.0.0/anchor.min.js', function() {
+    window.anchors.options = {
+      placement: CONFIG.anchorjs.placement,
+      visible  : CONFIG.anchorjs.visible
+    };
+    if (CONFIG.anchorjs.icon) {
+      window.anchors.options.icon = CONFIG.anchorjs.icon;
+    }
+    var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+    var res = [];
+    for (var item of el) {
+      res.push('.markdown-body > ' + item.trim());
+    }
+    if (CONFIG.anchorjs.placement === 'left') {
+      window.anchors.options.class = 'anchorjs-link-left';
+    }
+    window.anchors.add(res.join(', '));
+
+    Fluid.events.registerRefreshCallback(function() {
+      if ('anchors' in window) {
+        anchors.removeAll();
+        var el = (CONFIG.anchorjs.element || 'h1,h2,h3,h4,h5,h6').split(',');
+        var res = [];
+        for (var item of el) {
+          res.push('.markdown-body > ' + item.trim());
+        }
+        if (CONFIG.anchorjs.placement === 'left') {
+          anchors.options.class = 'anchorjs-link-left';
+        }
+        anchors.add(res.join(', '));
+      }
+    });
+  });
+</script>
+
+
+  
+<script>
+  Fluid.utils.createScript('https://lib.baomitu.com/fancybox/3.5.7/jquery.fancybox.min.js', function() {
+    Fluid.plugins.fancyBox();
+  });
+</script>
+
+
+  <script>Fluid.plugins.imageCaption();</script>
+
+  <script  src="/js/local-search.js" ></script>
+
+
+
+
+
+<!-- 主题的启动项，将它保持在最底部 -->
+<!-- the boot of the theme, keep it at the bottom -->
+<script  src="/js/boot.js" ></script>
+
+
+  
+
+  <noscript>
+    <div class="noscript-warning">博客在允许 JavaScript 运行的环境下浏览效果更佳</div>
+  </noscript>
+</body>
+</html>
